@@ -38,7 +38,7 @@ const notifyInterval=1
 //0为关闭通知，1为所有通知，2为宝箱领取成功通知，3为宝箱每18次通知一次
 
 
-const jbid=1;
+const jbid= ;
 const dd=5//延迟
 
 
@@ -116,7 +116,7 @@ function all()
 
  {
 
-   for(var i=0;i<11;i++)//修改为i<账号数➕0
+   for(var i=0;i<11;i++)//修改为i<账号数➕1
  { (function(i) {
             setTimeout(function() {
 
