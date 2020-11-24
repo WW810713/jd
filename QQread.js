@@ -38,7 +38,7 @@ const notifyInterval=1
 //0为关闭通知，1为所有通知，2为宝箱领取成功通知，3为宝箱每18次通知一次
 
 
-const jbid= ;
+const jbid=0;
 const dd=5//延迟
 
 
