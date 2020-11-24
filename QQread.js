@@ -1,42 +1,30 @@
 
-/*ziye
+/*
 
 
-进https://m.q.qq.com/a/s/128376eb36942c22355469e99b20b9f2 点我的 获取cookie
+浏览器打开 https://m.q.qq.com/a/s/f9726d0a930319a7dd35bbcc8e42dc60 --点我的 --获取cookie
 
-⚠️可能会卡住，但是能获取到cookie，然后注释重写就行了！
+⚠️获取cookie，然后注释重写就行了！
 
 hostname=mqqapi.reader.qq.com
 
 
-#企鹅读书
-############## 圈x
+#QQ读书
+## quanx
 https:\/\/mqqapi\.reader\.qq\.com\/mqq\/user\/init url script-request-header qqread.js
 
 
-############## loon
+## loon
 
 
-//企鹅读书
+#QQ读书
 http-request https:\/\/mqqapi\.reader\.qq\.com\/mqq\/user\/init script-path=qqread.js, requires-header=true
 
 
-############## surge
+## surge
 
-//企鹅读书
-企鹅读书 = type=http-request,pattern=https:\/\/mqqapi\.reader\.qq\.com\/mqq\/user\/init,script-path=qqread.js, requires-header=true
-
-
-
-
-
-
-
-
-
-
-
-
+#QQ读书
+QQ读书 = type=http-request,pattern=https:\/\/mqqapi\.reader\.qq\.com\/mqq\/user\/init,script-path=qqread.js, requires-header=true
 
 
 
@@ -181,7 +169,7 @@ else if (i==10) showmsg()//自己修改为账号数
 
 
 
-, (i + 1) *dd*100);
+, (i + 0) *dd*100);
                 })(i)
 
 
@@ -193,24 +181,6 @@ else if (i==10) showmsg()//自己修改为账号数
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
