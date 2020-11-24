@@ -8,9 +8,6 @@
 
 hostname=mqqapi.reader.qq.com
 
-[task_local]
- 2 */22 * * * ? https://raw.githubusercontent.com/xingliuchao/jd/main/QQread.js, tag=QQ阅读
-
 #QQ读书
 ## quanx
 https:\/\/mqqapi\.reader\.qq\.com\/mqq\/user\/init url script-request-header https://raw.githubusercontent.com/xingliuchao/jd/main/QQread.js
@@ -33,7 +30,7 @@ QQ读书 = type=http-request,pattern=https:\/\/mqqapi\.reader\.qq\.com\/mqq\/use
 */
 
 
-const jsname='企鹅读书'
+const jsname='QQ读书'
 const $ = Env(jsname)
 
 const logs = 0;   //0为关闭日志，1为开启
