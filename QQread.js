@@ -8,23 +8,24 @@
 
 hostname=mqqapi.reader.qq.com
 
+2 */22 * * * ? https://raw.githubusercontent.com/xingliuchao/jd/main/QQread.js, tag=QQ阅读
 
 #QQ读书
 ## quanx
-https:\/\/mqqapi\.reader\.qq\.com\/mqq\/user\/init url script-request-header qqread.js
+https:\/\/mqqapi\.reader\.qq\.com\/mqq\/user\/init url script-request-header https://raw.githubusercontent.com/xingliuchao/jd/main/QQread.js
 
 
 ## loon
 
 
 #QQ读书
-http-request https:\/\/mqqapi\.reader\.qq\.com\/mqq\/user\/init script-path=qqread.js, requires-header=true
+http-request https:\/\/mqqapi\.reader\.qq\.com\/mqq\/user\/init script-path=https://raw.githubusercontent.com/xingliuchao/jd/main/QQread.js, requires-header=true
 
 
 ## surge
 
 #QQ读书
-QQ读书 = type=http-request,pattern=https:\/\/mqqapi\.reader\.qq\.com\/mqq\/user\/init,script-path=qqread.js, requires-header=true
+QQ读书 = type=http-request,pattern=https:\/\/mqqapi\.reader\.qq\.com\/mqq\/user\/init,script-path=https://raw.githubusercontent.com/xingliuchao/jd/main/QQread.js, requires-header=true
 
 
 
