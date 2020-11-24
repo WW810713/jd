@@ -8,7 +8,8 @@
 
 hostname=mqqapi.reader.qq.com
 
-2 */22 * * * ? https://raw.githubusercontent.com/xingliuchao/jd/main/QQread.js, tag=QQ阅读
+[task_local]
+ 2 */22 * * * ? https://raw.githubusercontent.com/xingliuchao/jd/main/QQread.js, tag=QQ阅读
 
 #QQ读书
 ## quanx
