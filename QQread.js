@@ -116,7 +116,7 @@ function all()
 
  {
 
-   for(var i=0;i<11;i++)//修改为i<账号数➕1
+   for(var i=0;i<11;i++)//修改为i<账号数➕0
  { (function(i) {
             setTimeout(function() {
 
