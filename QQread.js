@@ -2,9 +2,9 @@
 更新使用了ziye的脚本（https://m.q.qq.com/a/s/d3eacc70120b9a37e46bad408c0c4c2a)//date-11/26
 使用方法
 浏览器打开 https://m.q.qq.com/a/s/f9726d0a930319a7dd35bbcc8e42dc60 
---点我的 --获取cookie
+---点我的 ---获取cookie---进一本书 看 10秒以下 然后退出，获取阅读时长cookie，一定不能超过10秒
 
-⚠️获取cookie，然后注释重写就行了！
+⚠️获取cookie然后注释重写就行了！
 
 hostname=mqqapi.reader.qq.com
 
