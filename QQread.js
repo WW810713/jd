@@ -11,19 +11,20 @@ hostname=mqqapi.reader.qq.com
 #QQ读书
 ## quanx
 https:\/\/mqqapi\.reader\.qq\.com\/mqq\/user\/init url script-request-header https://raw.githubusercontent.com/xingliuchao/jd/main/QQread.js
-
+https:\/\/mqqapi\.reader\.qq\.com\/mqq\/addReadTimeWithBid? url script-request-header https://raw.githubusercontent.com/xingliuchao/jd/main/QQread.js
 
 ## loon
 
 
 #QQ读书
 http-request https:\/\/mqqapi\.reader\.qq\.com\/mqq\/user\/init script-path=https://raw.githubusercontent.com/xingliuchao/jd/main/QQread.js, requires-header=true
-
+http-request https:\/\/mqqapi\.reader\.qq\.com\/mqq\/addReadTimeWithBid? script-path=https://raw.githubusercontent.com/xingliuchao/jd/main/QQread.js, requires-header=true
 
 ## surge
 
 #QQ读书
 QQ读书 = type=http-request,pattern=https:\/\/mqqapi\.reader\.qq\.com\/mqq\/user\/init,script-path=https://raw.githubusercontent.com/xingliuchao/jd/main/QQread.js, requires-header=true
+QQ读书 = type=http-request,pattern=https:\/\/mqqapi\.reader\.qq\.com\/mqq\/addReadTimeWithBid? script-path=https://raw.githubusercontent.com/xingliuchao/jd/main/QQread.js, requires-header=true
 
 
 
@@ -35,7 +36,7 @@ const $ = Env(jsname)
 
 
 const logs = 0;   //0为关闭日志，1为开启
-const notifyInterval=2
+const notifyInterval=3
 //0为关闭通知，1为所有通知，2为宝箱领取成功通知，3为宝箱每10次通知一次
 
 
@@ -55,6 +56,8 @@ const qqreadbodyKey = 'qqreadbody'+jbid
 const qqreadbodyVal = $.getdata(qqreadbodyKey)
 
 
+
+
 const qqreadtimeurlKey = 'qqreadtimeurl'+jbid
 const qqreadtimeurlVal = $.getdata(qqreadtimeurlKey)
 
@@ -63,14 +66,19 @@ const qqreadtimeheaderKey = 'qqreadtimehd'+jbid
 const qqreadtimeheaderVal= $.getdata(qqreadtimeheaderKey)
 
 
-const qqreadtimebodyVal = ''
+
+
+
+
 
 
 
 var tz=''
 
 
-//CKing
+
+
+//CK运行
 
 let isGetCookie = typeof $request !== 'undefined'
 if (isGetCookie) {
@@ -81,6 +89,9 @@ if (isGetCookie) {
 
 
 
+
+
+
 function GetCookie() {
 
    if($request &&$request.url.indexOf("init")>=0) {
@@ -88,12 +99,12 @@ function GetCookie() {
   const qqreadurlVal = $request.url
 if (qqreadurlVal)        $.setdata(qqreadurlVal,qqreadurlKey)
     $.log(`[${jsname}] 获取url请求: 成功,qqreadurlVal: ${qqreadurlVal}`)
-//$.msg(qqreadurlKey, `获取url: 成功🎉`, ``)
+
     
   const qqreadbodyVal = $request.body
     if (qqreadbodyVal)        $.setdata(qqreadbodyVal,qqreadbodyKey)
     $.log(`[${jsname}] 获取阅读: 成功,qqreadbodyVal: ${qqreadbodyVal}`)
-//$.msg(qqreadbodyKey, `获取body: 成功🎉`, ``)
+
     
 const qqreadheaderVal = JSON.stringify($request.headers)
     if (qqreadheaderVal)        $.setdata(qqreadheaderVal,qqreadheaderKey)
@@ -105,14 +116,25 @@ const qqreadheaderVal = JSON.stringify($request.headers)
 
 
 
+
+
 else if($request &&$request.url.indexOf("addReadTimeWithBid?")>=0) {
 
   const qqreadtimeurlVal = $request.url
 if (qqreadtimeurlVal)        $.setdata(qqreadtimeurlVal,qqreadtimeurlKey)
     $.log(`[${jsname}] 获取阅读时长url: 成功,qqreadtimeurlVal: ${qqreadtimeurlVal}`)
-$.msg(qqreadtimeurlKey, `获取阅读时长cookie: 成功🎉`, ``)
+
     
-    
+ 
+
+
+const qqreadtimeheaderVal = JSON.stringify($request.headers)
+    if (qqreadtimeheaderVal)        $.setdata(qqreadtimeheaderVal,qqreadtimeheaderKey)
+    $.log(`[${jsname}] 获取时长header: 成功,qqreadtimeheaderVal: ${qqreadtimeheaderVal}`)
+    $.msg(qqreadtimeheaderKey, `获取阅读时长cookie: 成功🎉`, ``)
+
+
+   
   
 
 }
@@ -131,10 +153,10 @@ function all()
  { (function(i) {
             setTimeout(function() {
 
-     if (i==0)qqreadinfo()
+     if (i==0)qqreadinfo();
 else if  (i==1)qqreadtime();
 
-else if (i==2)qqreadtask()
+else if (i==2)qqreadtask();
 
 
 else if (i==3&&task.data.treasureBox.doneFlag==0)
@@ -170,7 +192,7 @@ qqreadbox2();
 
 
 
-else if (i==12) showmsg()
+else if (i==12) showmsg();
 
  }
 
@@ -307,7 +329,7 @@ return new Promise((resolve, reject) => {
     url: qqreadtimeurlVal.replace(/readTime=/g, `readTime=${TIME}`),
 
     headers: JSON.parse(qqreadtimeheaderVal),
-     body:qqreadtimebodyVal
+     
     };
    $.get(toqqreadtimeurl,(error, response, data) =>{
      if(logs) $.log(`${jsname}, 阅读时长: ${data}`)
@@ -390,7 +412,7 @@ for(let i=0;i<config.data.pageParams.readTimeTask.length;i++)
 var ssrid=config.data.pageParams.readTimeTask[i].seconds
 
  
-const toqqreadssrurl = {url: `https://mqqapi.reader.qq.com/mqq/red_packet/user/read_time_reward?seconds=${ssrid}`,
+const toqqreadssrurl = {url: `https://mqqapi.reader.qq.com/mqq/red_packet/user/read_time?seconds=${ssrid}`,
 
 
     headers: JSON.parse(qqreadheaderVal),
@@ -444,14 +466,6 @@ if (sign.data.videoDoneFlag)
  {
 tz+=
 '【金币签到】:获得'+sign.data.todayAmount+'金币\n'
-
-for(let i=0;i<sign.data.dayList.length;i++)
- {
-tz+=sign.data.dayList[i].dayText+sign.data.dayList[i].amount+'金币\n'
-
-}
-
-
     }
 
 
@@ -631,6 +645,7 @@ $.msg(jsname,'',tz)//宝箱领取成功通知
 
 else if (notifyInterval==3&&box.data.count==0||box.data.count==10||box.data.count==20||box.data.count==30||box.data.count==40||box.data.count==50||box.data.count==60||box.data.count==70||box.data.count==80)
 $.msg(jsname,'',tz)//宝箱每10次通知一次
+
 
 
 
