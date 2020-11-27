@@ -1,6 +1,6 @@
 /*
 更新使用了ziye的脚本进行优化（https://m.q.qq.com/a/s/d3eacc70120b9a37e46bad408c0c4c2a)//date-11/26
-
+11/27增加随机奖励
 使用方法：
 1.重写引用https://raw.githubusercontent.com/xingliuchao/jd/main/QQreadCookie.conf
 
@@ -349,7 +349,7 @@ return new Promise((resolve, reject) => {
    if (config.code==0)
 tz+='【时长查询】:今日阅读'+(config.data.pageParams.todayReadSeconds/60).toFixed(0)+'分钟\n'
 
-if (task.data.taskList[2].doneFlag==0){
+if (task.data.taskList[1].doneFlag==0){
 
 
 for(let i=0;i<config.data.pageParams.readTimeRewardTask.length;i++)
