@@ -8,7 +8,7 @@
 4.手动运行成功后rmb自动提现到余额
 
 */
-const $ = new Env('支付宝天天挖矿');
+const $ = new Env('支付宝挖矿');
 const openurl = { "open-url" : "alipays://platformapi/startapp?saId=10000007&qrcode=https%3a%2f%2fqr.alipay.com%2fs7x160157ugopip2fb7fu5c" }
 !(async () => {
   if (typeof $request != "undefined") {
