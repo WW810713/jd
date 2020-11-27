@@ -3,6 +3,7 @@
 //
 1.支付宝搜索  http:/G0lRCHe75gT  进入--我的--授权登录才能获取cookie
 2.重写添加  https://raw.githubusercontent.com/xingliuchao/jd/main/alipayswkcookie.conf 并启用获取cookie
+3.重新进入（支付宝搜索  http:/G0lRCHe75gT）--点击/立即挖矿--成功获取cookie禁用
 3.添加[task_local] 10 0 * * * https://raw.githubusercontent.com/xingliuchao/jd/main/alipayswk.js, tag=支付宝挖矿, enabled=true
 4.手动运行成功后rmb自动提现到余额
 
