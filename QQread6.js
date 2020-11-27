@@ -1,5 +1,6 @@
 /*
-更新使用了ziye的脚本（https://m.q.qq.com/a/s/d3eacc70120b9a37e46bad408c0c4c2a)//date-11/26
+更新使用了ziye的脚本进行优化（https://m.q.qq.com/a/s/d3eacc70120b9a37e46bad408c0c4c2a)//date-11/26
+
 使用方法：
 1.重写引用https://raw.githubusercontent.com/xingliuchao/jd/main/QQreadCookie.conf
 
@@ -39,7 +40,7 @@ const $ = Env(jsname)
 
 
 const logs = 0;   //0为关闭日志，1为开启
-const notifyInterval=2
+const notifyInterval=1
 //0为关闭通知，1为所有通知，2为宝箱领取成功通知，3为宝箱每18次通知一次
 
 
@@ -51,7 +52,7 @@ const TIME=30//单次时长上传限制，默认5分钟
 
 const maxtime=20//每日上传时长限制，默认20小时
 
-const wktimess=1200//周奖励领取标准，默认1200分钟
+const wktimess=12000//周奖励领取标准，默认12000分钟
 
 
 const qqreadurlKey = 'qqreadurl'+jbid
@@ -169,7 +170,7 @@ qqreadsign();//金币签到
 else if (i==4&&task.data.treasureBox.doneFlag==0)
 qqreadbox();//宝箱
 
-else if (i==5&&task.data.taskList[2].doneFlag==1)
+else if (i==5&&task.data.taskList[2].doneFlag==0)
 qqreadssr1();//阅读金币1
 
 else if (i==6)
@@ -181,7 +182,7 @@ qqreadtake();//阅豆签到
 else if (i==8&&task.data.taskList[1].doneFlag==0)
 qqreaddayread();//阅读任务
 
-else if (i==9&&task.data.taskList[2].doneFlag==1)
+else if (i==9&&task.data.taskList[2].doneFlag==0)
 qqreadssr2();//阅读金币2
 
 else if (i==10&&task.data.taskList[3].doneFlag==0)
@@ -193,7 +194,7 @@ qqreadsign2();//签到翻倍
 else if (i==12&&task.data.treasureBox.videoDoneFlag==0)
 qqreadbox2();//宝箱翻倍
 
-else if (i==13&&task.data.taskList[2].doneFlag==1)
+else if (i==13&&task.data.taskList[2].doneFlag==0)
 qqreadssr3();//阅读金币3
 
 else if (i==14)
@@ -203,13 +204,11 @@ qqreadwktime();//周时长查询
 else if (i==15)
 qqreadpick();//领周时长奖励
 
-
-
-
-
+else if (i==16)
+showmsg();//通知
 
 else if (i==17)
-showmsg();//通知
+$.done();//结束
 
  }
 
@@ -350,7 +349,33 @@ return new Promise((resolve, reject) => {
    if (config.code==0)
 tz+='【时长查询】:今日阅读'+(config.data.pageParams.todayReadSeconds/60).toFixed(0)+'分钟\n'
 
+if (task.data.taskList[2].doneFlag==0){
 
+
+for(let i=0;i<config.data.pageParams.readTimeRewardTask.length;i++)
+ {
+ setTimeout(()=>{  
+
+var ssrproid=config.data.pageParams.readTimeRewardTask[i].seconds
+
+
+
+ 
+const toqqreadssrprourl = {
+
+    url: `https://mqqapi.reader.qq.com/mqq/red_packet/user/read_time_reward?seconds=${ssrproid}`,
+
+    headers: JSON.parse(qqreadheaderVal),
+    
+ timeout:60000};
+   $.get(toqqreadssrprourl,(error, response, data) =>{
+     if(logs) $.log(`${jsname}, 金币额外奖励: ${data}`)
+     ssrpro =JSON.parse(data)
+
+tz+=
+'【阅读随机金币】获得'+ssrpro.data.amount+'金币\n'
+	   
+	   
 resolve()
     })
    })
