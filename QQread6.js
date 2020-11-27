@@ -40,7 +40,7 @@ const $ = Env(jsname)
 
 
 const logs = 0;   //0为关闭日志，1为开启
-const notifyInterval=1
+const notifyInterval=2
 //0为关闭通知，1为所有通知，2为宝箱领取成功通知，3为宝箱每18次通知一次
 
 
@@ -344,36 +344,6 @@ return new Promise((resolve, reject) => {
 
    $.get(toqqreadconfigurl,(error, response, data) =>{
 
-     if(logs) $.log(`${jsname}, 阅读时长查询: ${data}`)
-     config =JSON.parse(data)
-   if (config.code==0)
-tz+='【时长查询】:今日阅读'+(config.data.pageParams.todayReadSeconds/60).toFixed(0)+'分钟\n'
-
-if (task.data.taskList[1].doneFlag==0){
-
-
-for(let i=0;i<config.data.pageParams.readTimeRewardTask.length;i++)
- {
- setTimeout(()=>{  
-
-var ssrproid=config.data.pageParams.readTimeRewardTask[i].seconds
-
-
-
- 
-const toqqreadssrprourl = {
-
-    url: `https://mqqapi.reader.qq.com/mqq/red_packet/user/read_time_reward?seconds=${ssrproid}`,
-
-    headers: JSON.parse(qqreadheaderVal),
-    
- timeout:60000};
-   $.get(toqqreadssrprourl,(error, response, data) =>{
-     if(logs) $.log(`${jsname}, 金币额外奖励: ${data}`)
-     ssrpro =JSON.parse(data)
-
-tz+=
-'【阅读随机金币】获得'+ssrpro.data.amount+'金币\n'
 	   
 	   
 resolve()
