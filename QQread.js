@@ -1,6 +1,6 @@
 /*
 更新使用了ziye的脚本进行优化（https://m.q.qq.com/a/s/d3eacc70120b9a37e46bad408c0c4c2a)//date-11/26
-11/27增加随机奖励
+11/28
 使用方法：
 1.重写引用https://raw.githubusercontent.com/xingliuchao/jd/main/QQreadCookie.conf
 
@@ -35,13 +35,13 @@ QQ读书 = type=http-request,pattern=https:\/\/mqqapi\.reader\.qq\.com\/mqq\/add
 */
 
 
-const jsname='QQ读书'
+const jsname='QQ读书小程序'
 const $ = Env(jsname)
 
 
 const logs = 0;   //0为关闭日志，1为开启
 const notifyInterval=2
-//0为关闭通知，1为所有通知，2为宝箱领取成功通知，3为宝箱每18次通知一次
+//0为关闭通知，1为所有通知，2为宝箱领取成功通知，3为宝箱每15次通知一次
 
 
 const jbid=1//换号则修改这个值,默认账号1
@@ -52,7 +52,7 @@ const TIME=30//单次时长上传限制，默认5分钟
 
 const maxtime=20//每日上传时长限制，默认20小时
 
-const wktimess=12000//周奖励领取标准，默认12000分钟
+const wktimess=1200//周奖励领取标准，默认1200分钟
 
 
 const qqreadurlKey = 'qqreadurl'+jbid
@@ -344,8 +344,12 @@ return new Promise((resolve, reject) => {
 
    $.get(toqqreadconfigurl,(error, response, data) =>{
 
-	   
-	   
+     if(logs) $.log(`${jsname}, 阅读时长查询: ${data}`)
+     config =JSON.parse(data)
+   if (config.code==0)
+tz+='【时长查询】:今日阅读'+(config.data.pageParams.todayReadSeconds/60).toFixed(0)+'分钟\n'
+
+
 resolve()
     })
    })
@@ -773,15 +777,18 @@ tz+='【周时长奖励'+(i+1)+'】:领取'+Packageid[i]+'阅豆\n'
 
 function showmsg() {
 
+	
+console.log(tz)
+	
 if (notifyInterval==1)
 $.msg(jsname,'',tz)//显示所有通知
 
-else if (notifyInterval==2&&box.data.amount>=0)
+else if (notifyInterval==2&&task.data.treasureBox.doneFlag==0)
 $.msg(jsname,'',tz)//宝箱领取成功通知
 
 
-else if (notifyInterval==3&&box.data.count==0||box.data.count==18||box.data.count==36||box.data.count==54||box.data.count==72)
-$.msg(jsname,'',tz)//宝箱每18次通知一次
+else if (notifyInterval==3&&task.data.treasureBox.count==0||task.data.treasureBox.count==15||task.data.treasureBox.count==30||task.data.treasureBox.count==45||task.data.treasureBox.count==60)
+$.msg(jsname,'',tz)//宝箱每15次通知一次
 
 
 
