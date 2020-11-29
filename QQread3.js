@@ -13,7 +13,7 @@ https://raw.githubusercontent.com/xingliuchao/jd/main/ReadCookie.conf
 
 获取cookie然后禁用本重写就行了！
 
-3.在[task_local]下粘贴---  2 */4 * * * ? https://raw.githubusercontent.com/xingliuchao/jd/main/QQread3.js, tag=QQ读书3, enabled=true
+3.在[task_local]下粘贴（（2 */4 * * * ? https://raw.githubusercontent.com/xingliuchao/jd/main/QQread3.js, tag=QQ读书3, enabled=true
 
 
 */
