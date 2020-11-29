@@ -38,6 +38,7 @@ QQ读书 = type=http-request,pattern=https:\/\/mqqapi\.reader\.qq\.com\/mqq\/add
 const jsname='QQ读书小程序'
 const $ = Env(jsname)
 
+console.log(`\n========= 脚本执行时间(TM)：${new Date(new Date().getTime() + 0 * 60 * 60 * 1000).toLocaleString('zh', {hour12: false})} =========\n`)
 
 const logs = 0;   //0为关闭日志，1为开启
 const notifyInterval=2
@@ -164,7 +165,7 @@ qqreadconfig();//时长查询
 else if (i==2)
 qqreadtask();//任务列表
 
-else if (i==3)
+else if (i==3&&task.data.taskList[0].doneFlag==0)
 qqreadsign();//金币签到
 
 else if (i==4&&task.data.treasureBox.doneFlag==0)
@@ -173,7 +174,7 @@ qqreadbox();//宝箱
 else if (i==5&&task.data.taskList[2].doneFlag==0)
 qqreadssr1();//阅读金币1
 
-else if (i==6)
+else if (i==6&&config.data.pageParams.todayReadSeconds/3600<=maxtime)
 qqreadtime();//上传时长
 
 else if (i==7&&task.data.taskList[0].doneFlag==0)
@@ -188,7 +189,7 @@ qqreadssr2();//阅读金币2
 else if (i==10&&task.data.taskList[3].doneFlag==0)
 qqreadvideo();//视频任务
 
-else if(i==11&&sign.data.videoDoneFlag==0)
+else if(i==11&&task.data.taskList[0].doneFlag==0)
 qqreadsign2();//签到翻倍
 
 else if (i==12&&task.data.treasureBox.videoDoneFlag==0)
@@ -374,9 +375,7 @@ return new Promise((resolve, reject) => {
     headers: JSON.parse(qqreadtimeheaderVal),
      
     };
-
-if (config.data.pageParams.todayReadSeconds/3600<=maxtime){
-
+	
    $.get(toqqreadtimeurl,(error, response, data) =>{
      if(logs) $.log(`${jsname}, 阅读时长: ${data}`)
      time =JSON.parse(data)
@@ -387,8 +386,6 @@ tz+='【阅读时长】:上传'+TIME/6+'分钟\n'
 
 resolve()
     })
-
-}
    })
   }  
 
