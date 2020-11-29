@@ -13,8 +13,6 @@ https://raw.githubusercontent.com/xingliuchao/jd/main/ReadCookie.conf
 
 获取cookie然后禁用本重写就行了！
 
-3.在[task_local]下粘贴（（2 */4 * * * ? https://raw.githubusercontent.com/xingliuchao/jd/main/QQread3.js, tag=QQ读书3, enabled=true
-
 
 */
 
@@ -24,7 +22,7 @@ const $ = Env(jsname)
 
 
 const logs = 0;   //0为关闭日志，1为开启
-const notifyInterval=2
+const notifyInterval=1
 //0为关闭通知，1为所有通知，2为宝箱领取成功通知，3为宝箱每15次通知一次
 
 
