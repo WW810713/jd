@@ -1,21 +1,19 @@
 /*
 更新使用了ziye的脚本进行优化（https://m.q.qq.com/a/s/d3eacc70120b9a37e46bad408c0c4c2a)//date-11/26
-11/28
+11/29
 使用方法：
 1.点击 
 https://m.q.qq.com/a/s/f9726d0a930319a7dd35bbcc8e42dc60  进入读书程序
 
 2.重写引用
-https://raw.githubusercontent.com/xingliuchao/jd/main/QQreadCookie.conf
+https://raw.githubusercontent.com/xingliuchao/jd/main/ReadCookie.conf
 
 ---点读书程序〉我的 ---获取cookie
 ---进一本书看 5秒左右然后返回，获取阅读时长cookie，一定不能超过10秒
 
 获取cookie然后禁用本重写就行了！
 
-3.在[task_local]下粘贴
-
- 2 */4 * * * ? https://raw.githubusercontent.com/xingliuchao/jd/main/QQread.js, tag=QQ读书3, enabled=true
+3.在[task_local]下粘贴---  2 */4 * * * ? https://raw.githubusercontent.com/xingliuchao/jd/main/QQread3.js, tag=QQ读书3, enabled=true
 
 
 */
@@ -62,6 +60,41 @@ const qqread3timeheaderKey = 'qqread3timehd'+jbid
 const qqread3timeheaderVal= $.getdata(qqread3timeheaderKey)
 
 
+const openurl = { "open-url" : "https://m.q.qq.com/a/s/f9726d0a930319a7dd35bbcc8e42dc60" }
+!(async () => {
+  if (typeof $request != "undefined") {
+    await setSignData()
+  } else {
+    await showSignInfo()
+function showSignInfo(timeout = 0) {
+  return new Promise((resolve) => {
+    setTimeout( ()=>{
+      if (typeof $.getdata('qqread3signurl') === "undefined") {
+        $.msg($.name,"",'请先点击此通知！获取Cookie脚本', openurl)
+        return
+      }
+      let url = {
+        url : $.getdata('qqread3signurl').replace('createSign','showSignInfo'),
+        headers : JSON.parse($.getdata('qqread3signheader'))
+      }
+      $.post(url, async (err, resp, data) => {
+        try {
+          data = JSON.parse(data);
+          console.log(data)
+          $.signinfo = data;
+          if (data.data.hasSign === 'false') {
+            await createSign()
+          }
+          await msgShow()
+        } catch (e) {
+          $.logErr(e, resp);
+        } finally {
+          resolve()
+        }
+      })
+    },timeout)
+  })
+}
 
 
 var tz=''
@@ -100,7 +133,7 @@ if (qqread3urlVal)        $.setdata(qqread3urlVal,qqread3urlKey)
 const qqread3headerVal = JSON.stringify($request.headers)
     if (qqread3headerVal)        $.setdata(qqread3headerVal,qqread3headerKey)
     $.log(`[${jsname}] 获取Cookie: 成功,qqread3headerVal: ${qqread3headerVal}`)
-    $.msg(qqread3headerKey, `获取cookie: 成功🎉`, ``)
+    $.msg(qqread3headerKey, `获取cookie: ✅成功，请禁用获取Cookie重写`, ``)
   
 
 }
@@ -119,7 +152,7 @@ if (qqread3timeurlVal)        $.setdata(qqread3timeurlVal,qqread3timeurlKey)
 const qqread3timeheaderVal = JSON.stringify($request.headers)
     if (qqread3timeheaderVal)        $.setdata(qqread3timeheaderVal,qqread3timeheaderKey)
     $.log(`[${jsname}] 获取时长header: 成功,qqread3timeheaderVal: ${qqread3timeheaderVal}`)
-    $.msg(qqread3timeheaderKey, `获取阅读时长cookie: 成功🎉`, ``)
+    $.msg(qqread3timeheaderKey, `获取阅读时长cookie: ✅成功，请禁用获取Cookie重写`, ``)
 
 
    
