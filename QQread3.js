@@ -47,12 +47,8 @@ const qqread3headerVal= $.getdata(qqread3headerKey)
 const qqread3bodyKey = 'qqread3body'+jbid
 const qqread3bodyVal = $.getdata(qqread3bodyKey)
 
-
-
-
 const qqread3timeurlKey = 'qqread3timeurl'+jbid
 const qqread3timeurlVal = $.getdata(qqread3timeurlKey)
-
 
 const qqread3timeheaderKey = 'qqread3timehd'+jbid
 const qqread3timeheaderVal= $.getdata(qqread3timeheaderKey)
@@ -93,8 +89,16 @@ function showSignInfo(timeout = 0) {
     },timeout)
   })
 }
+	  
 
-
+let message = ""
+if ($.signinfo.code === "200") {
+    message += '请先点击此通知！获取Cookie脚本' + $.name,"",'请先点击此通知！获取Cookie脚本', openurl)
+   
+    }
+	
+	
+	  
 var tz=''
 
 
