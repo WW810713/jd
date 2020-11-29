@@ -25,7 +25,7 @@ const notifyInterval=2
 
 const jbid=8//
 
-const dd=5//
+const dd=1//
 
 const TIME=30//
 
