@@ -1,7 +1,59 @@
-*/copy-ziye for actions
+/* copy-ziye for actions
+11.25 增加 阅读时长上传，阅读金币，阅读随机金币
+11.25 修复翻倍宝箱不同时领取的问题.增加阅读金币判定
+11.25 修复阅读时长问题，阅读金币问题，请重新获取时长cookie
+11.26 随机金币只有一次，故去除，调整修复阅读金币问题，增加时长上传限制
+11.26 增加领取周时长奖励
+11.26 增加结束命令
+11.27 调整通知为，成功开启宝箱再通知
+11.28 修复错误
+11.29 更新 支持action.默认每天21点到21点20通知
+12.2 修复打卡问题
+12.3 缩短运行时间，由于企鹅读书版本更新.请手动进去看一次书
+12.3 调整推送时间为12点和24点左右
+12.6 精简打印通知
+12.7 解决1金币问题，
+
+⚠️cookie获取方法：
+
+进 https://m.q.qq.com/a/s/d3eacc70120b9a37e46bad408c0c4c2a  
+
+进一本书 看 10秒以下 然后退出，获取阅读时长cookie和更新body，看书一定不能超过10秒
+
+可能某些页面会卡住，但是能获取到cookie，再注释cookie重写就行了！
+
+⚠️宝箱奖励为20分钟一次，自己根据情况设置定时，建议设置11分钟一次
+
+hostname=mqqapi.reader.qq.com
+
+############## 圈x
+
+#企鹅读书获取cookie
+https:\/\/mqqapi\.reader\.qq\.com\/log\/v4\/mqq\/track url script-request-body https://raw.githubusercontent.com/ziye12/JavaScript/master/Task/qqreads.js
+
+#企鹅读书获取时长cookie
+https:\/\/mqqapi\.reader\.qq\.com\/mqq\/addReadTimeWithBid? url script-request-header https://raw.githubusercontent.com/ziye12/JavaScript/master/Task/qqreads.js
+
+############## loon
+
+//企鹅读书获取cookie
+http-request https:\/\/mqqapi\.reader\.qq\.com\/log\/v4\/mqq\/track script-path=https://raw.githubusercontent.com/ziye12/JavaScript/master/Task/qqreads.js,requires-body=true, tag=企鹅读书获取cookie
+
+//企鹅读书获取时长cookie
+http-request https:\/\/mqqapi\.reader\.qq\.com\/mqq\/addReadTimeWithBid? script-path=https://raw.githubusercontent.com/ziye12/JavaScript/master/Task/qqreads.js, requires-header=true, tag=企鹅读书获取时长cookie
+
+############## surge
+
+//企鹅读书获取cookie
+企鹅读书 = type=http-request,pattern=https:\/\/mqqapi\.reader\.qq\.com\/log\/v4\/mqq\/track,script-path=https://raw.githubusercontent.com/ziye12/JavaScript/master/Task/qqreads.js, 
+
+//企鹅读书获取时长cookie
+企鹅读书 = type=http-request,pattern=https:\/\/mqqapi\.reader\.qq\.com\/mqq\/addReadTimeWithBid?,script-path=https://raw.githubusercontent.com/ziye12/JavaScript/master/Task/qqreads.js, 
 
 
-const jsname='QQ读书小程序'
+*/
+
+const jsname = "企鹅读书";
 const $ = Env(jsname);
 const notify = $.isNode() ? require("./sendNotify") : "";
 
