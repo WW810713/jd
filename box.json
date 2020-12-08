@@ -16,11 +16,11 @@
               "key": "1",
               "label": "开启通知"
             },
-            {
+                    {
               "key": "2",
               "label": "宝箱领取成功通知"
             },
-            {
+                    {
               "key": "3",
               "label": "宝箱每15次通知一次"
             }
@@ -30,10 +30,10 @@
          "repo": "https://raw.githubusercontent.com/xingliuchao/jd/main/QQread.js",
          "icons": ["https://raw.githubusercontent.com/Orz-3/mini/master/QQ.png", "https://raw.githubusercontent.com/Orz-3/task/master/QQ.png"]  
       
-    },
+             },
   
 
-    {
+      {
       "id": "cookie",
       "name": "QQ阅读(自用)",
       "keys": ["qqreadbd", "qqreadtimeurl", "qqreadtimehd", "qqreadbd2", "qqreadtimeurl2", "qqreadtimehd2", "qqreadbd3", "qqreadtimeurl3", "qqreadtimehd3", "qqreadbd4", "qqreadtimeurl4", "qqreadtimehd4", "qqreadbd5", "qqreadtimeurl5", "qqreadtimehd5"],
@@ -45,14 +45,14 @@
         "val": "1",
         "type": "number",
         "desc": "当前要抓取cookie的账号序号，如：1、2、3、4"
-      },
-      {
+       },
+       {
         "id": "qeCount",
         "name": "账号个数",
         "val": "1",
         "type": "number",
         "desc": "要共同跑几个账号"
-      }
+        }
 	
 	    
       "repo": "https://raw.githubusercontent.com/xingliuchao/jd/main/QQread.js",
