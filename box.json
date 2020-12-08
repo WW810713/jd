@@ -25,16 +25,18 @@
         "val": "1",
         "type": "number",
         "desc": "要共同跑几个账号"
-      }
-        "settings": 
-
-				{
+      },
+		    {
 					"id": "notifyInterval",
 					"name": "默认开启所有通知",
 					"val": "1",
 					"type": "radios",
 					"desc": "请根据实际使用情况选择",
                                         "items": [
+            {
+              "key": "0",
+              "label": "关闭通知"
+            },
             {
               "key": "1",
               "label": "开启通知"
@@ -47,10 +49,11 @@
               "key": "3",
               "label": "宝箱每15次通知一次"
             }
-            
+
+          
+	}
        
-				},		    
-    ],
+    ]
       "repo": "https://raw.githubusercontent.com/xingliuchao/jd/main/QQread.js",
       "icons": ["https://raw.githubusercontent.com/Orz-3/mini/master/QQ.png", "https://raw.githubusercontent.com/Orz-3/task/master/QQ.png"]  
     }
