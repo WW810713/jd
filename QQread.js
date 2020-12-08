@@ -1,22 +1,5 @@
-/* for action ziye
-11.25 增加 阅读时长上传，阅读金币，阅读随机金币
-11.25 修复翻倍宝箱不同时领取的问题.增加阅读金币判定
-11.25 修复阅读时长问题，阅读金币问题，请重新获取时长cookie
-11.26 随机金币只有一次，故去除，调整修复阅读金币问题，增加时长上传限制
-11.26 增加领取周时长奖励
-11.26 增加结束命令
-11.27 调整通知为，成功开启宝箱再通知
-11.28 修复错误
-11.29 更新 支持action.默认每天21点到21点20通知
-12.2 修复打卡问题
-12.3 缩短运行时间，由于企鹅读书版本更新.请手动进去看一次书
-12.3 调整推送时间为12点和24点左右
-12.6 精简打印通知
-12.7 解决1金币问题，务必重新获取一次更新body
 
-⚠️cookie获取方法：
-
-进书库选择一本书,看10秒以下,然后退出，获取时长url和时长header以及更新body，看书一定不能超过10秒
+/* ziye12.8 更新支持boxjs
 
 Secrets对应关系如下，多账号默认换行
 
@@ -28,6 +11,7 @@ qqreadtimeheaderVal   👉   QQREAD_TIMEHD
 
 const jsname = "QQ读书小程序";
 const $ = Env(jsname);
+$.idx = ($.idx = ($.getval('qeSuffix') || '1') - 1) > 0 ? ($.idx + 1 + '') : ''; // 账号扩展字符
 const notify = $.isNode() ? require("./sendNotify") : "";
 
 let tz = "";
@@ -121,6 +105,15 @@ if ($.isNode()) {
   qqreadbdArr.push($.getdata("qqreadbd"));
   qqreadtimeurlArr.push($.getdata("qqreadtimeurl"));
   qqreadtimehdArr.push($.getdata("qqreadtimehd"));
+  // 根据boxjs中设置的额外账号数，添加存在的账号数据进行任务处理
+  let qeCount = ($.getval('qeCount') || '1') - 0;
+  for (let i = 2; i <= qeCount; i++) {
+    if ($.getdata(`qqreadbd${i}`)) {
+      qqreadbdArr.push($.getdata(`qqreadbd${i}`));
+      qqreadtimeurlArr.push($.getdata(`qqreadtimeurl${i}`));
+      qqreadtimehdArr.push($.getdata(`qqreadtimehd${i}`));
+    }
+  }
 }
 
 if ((isGetCookie = typeof $request !== "undefined")) {
@@ -132,25 +125,25 @@ function GetCookie() {
 
 if ($request && $request.url.indexOf("addReadTimeWithBid?") >= 0) {
     const qqreadtimeurlVal = $request.url;
-    if (qqreadtimeurlVal) $.setdata(qqreadtimeurlVal, "qqreadtimeurl");
+    if (qqreadtimeurlVal) $.setdata(qqreadtimeurlVal, "qqreadtimeurl" + $.idx);
     $.log(
-      `[${jsname}] 获取时长url: 成功,qqreadtimeurlVal: ${qqreadtimeurlVal}`
+      `[${jsname + $.idx}] 获取时长url: 成功,qqreadtimeurlVal: ${qqreadtimeurlVal}`
     );
- $.msg(jsname, `获取时长url: 成功🎉`, ``);
+ $.msg(jsname + $.idx, `获取时长url: 成功🎉`, ``);
     const qqreadtimeheaderVal = JSON.stringify($request.headers);
-    if (qqreadtimeheaderVal) $.setdata(qqreadtimeheaderVal, "qqreadtimehd");
+    if (qqreadtimeheaderVal) $.setdata(qqreadtimeheaderVal, "qqreadtimehd" + $.idx);
     $.log(
-      `[${jsname}] 获取时长header: 成功,qqreadtimeheaderVal: ${qqreadtimeheaderVal}`
+      `[${jsname + $.idx}] 获取时长header: 成功,qqreadtimeheaderVal: ${qqreadtimeheaderVal}`
     );
-    $.msg(jsname, `获取时长header: 成功🎉`, ``);
+    $.msg(jsname + $.idx, `获取时长header: 成功🎉`, ``);
   }
-  else if ($request &&$request.body.indexOf("bookDetail_bottomBar_read_C")>=0&&$request.body.indexOf("topBar_left_back_C")<0&&$request.body.indexOf("bookRead_dropOut_shelfYes_C")<0){
+  else if ($request &&$request.body.indexOf("bookDetail_bottomBar_read_C")>=0&&$request.body.indexOf("bookRead_show_I")>=0&&$request.body.indexOf("topBar_left_back_C")<0&&$request.body.indexOf("bookRead_dropOut_shelfYes_C")<0){
     const qqreadbodyVal = $request.body;
-    if (qqreadbodyVal) $.setdata(qqreadbodyVal, "qqreadbd");
+    if (qqreadbodyVal) $.setdata(qqreadbodyVal, "qqreadbd" + $.idx);
     $.log(
-      `[${jsname}] 获取更新body: 成功,qqreadbodyVal: ${qqreadbodyVal}`
+      `[${jsname + $.idx}] 获取更新body: 成功,qqreadbodyVal: ${qqreadbodyVal}`
     );
-    $.msg(jsname, `获取更新body: 成功🎉`, ``);
+    $.msg(jsname + $.idx, `获取更新body: 成功🎉`, ``);
 
     } 
 
@@ -269,12 +262,12 @@ function qqreadtask() {
 // 更新
 function qqreadtrack() {
   return new Promise((resolve, reject) => {
-    const toqqreadtrackurl = {
-      url: "https://mqqapi.reader.qq.com/log/v4/mqq/track",
-
-      headers: JSON.parse(qqreadtimeheaderVal),
-	  body: qqreadbodyVal,      
-      timeout: 60000,
+    const body = qqreadbodyVal.replace(new RegExp(/"dis":[0-9]{13}/),`"dis":${new Date().getTime()}`) 
+    const toqqreadtrackurl = { 
+      url: "https://mqqapi.reader.qq.com/log/v4/mqq/track", 
+      headers: JSON.parse(qqreadtimeheaderVal), 
+   body: body,       
+      timeout: 60000, 
     };
     $.post(toqqreadtrackurl, (error, response, data) => {
       if (logs) $.log(`${jsname}, 更新: ${data}`);
@@ -293,9 +286,7 @@ function qqreadinfo() {
   return new Promise((resolve, reject) => {
     const toqqreadinfourl = {
       url: "https://mqqapi.reader.qq.com/mqq/user/init",
-
       headers: JSON.parse(qqreadtimeheaderVal),
-
       timeout: 60000,
     };
     $.get(toqqreadinfourl, (error, response, data) => {
@@ -320,7 +311,6 @@ function qqreadtake() {
     $.post(toqqreadtakeurl, (error, response, data) => {
       if (logs) $.log(`${jsname}, 阅豆签到: ${data}`);
       take = JSON.parse(data);
-
       if (take.data.takeTicket > 0) {
         tz += `【阅豆签到】:获得${take.data.takeTicket}豆\n`;
       }
