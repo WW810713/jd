@@ -7,8 +7,8 @@
   "apps": [
 	      {
 	"id": "notifyInterval",
-	"name": "默认开启所有通知",
-	"val": "1",
+	"name": "默认15次通知一次",
+	"val": "3",
 	"type": "radios",
 	"desc": "请根据实际使用情况选择",
         "items": 			
@@ -23,15 +23,8 @@
                     {
               "key": "3",
               "label": "宝箱每15次通知一次"
-            }
-            
-                                                                           
-	
-         "repo": "https://raw.githubusercontent.com/xingliuchao/jd/main/QQread.js",
-         "icons": ["https://raw.githubusercontent.com/Orz-3/mini/master/QQ.png", "https://raw.githubusercontent.com/Orz-3/task/master/QQ.png"]  
-      
-             },
-  
+            },
+ 
 
       {
       "id": "cookie",
