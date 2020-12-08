@@ -110,9 +110,12 @@
           ]
 				}
 			]
-			"id": "QQread10,"
-			"name": "QQ阅读小程序多账号自用",
-			"keys": [],
+			[
+
+		{
+			"id": "QQread10",
+			"name": "QQ阅读小程序多账号",
+			"keys": ["qqreadhd1","qqreadtimehd1","qqreadhd2","qqreadtimehd2","qqreadhd3","qqreadtimehd3","qqreadhd4","qqreadtimehd4","qqreadhd5","qqreadtimehd5","qqreadhd6","qqreadtimehd6","qqreadhd7","qqreadtimehd7","qqreadhd8","qqreadtimehd8","qqreadhd9","qqreadtimehd9","qqreadhda","qqreadtimehda"],
 			"descs_html": [
       
       ],
