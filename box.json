@@ -47,7 +47,7 @@
                           "label": "宝箱每15次通知一次"
                              }
             
-                                    ]
+                                    
 	   },
           
 	
@@ -56,6 +56,7 @@
 	    
       "repo": "https://raw.githubusercontent.com/xingliuchao/jd/main/QQread.js",
       "icons": ["https://raw.githubusercontent.com/Orz-3/mini/master/QQ.png", "https://raw.githubusercontent.com/Orz-3/task/master/QQ.png"]  
+      ]
     }
   ]
 }
