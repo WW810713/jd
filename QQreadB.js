@@ -1,12 +1,4 @@
 */
-Secrets对应关系如下，多账号默认换行
-qqreadbodyVal         👉   QQREAD_BODY
-qqreadtimeurlVal      👉   QQREAD_TIMEURL
-qqreadtimeheaderVal   👉   QQREAD_TIMEHD
-
-
-*/
-
 const jsname = "QQ读书小程序B";
 const $ = Env(jsname);
 const notify = $.isNode() ? require("./sendNotify") : "";
