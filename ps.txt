@@ -10,7 +10,7 @@
 
 😀loon
 
-使用方法:打开APP，配置 -> 脚本 -> 订阅脚本- > 点击右上角+号 -> 添加url链接  https://raw.githubusercontent.com/xingliuchao/jd/main/QQreadcookie-loon.conf
+配置 -> 脚本 -> 订阅脚本- > 点击右上角+号 -> 添加url链接  https://raw.githubusercontent.com/xingliuchao/jd/main/QQreadcookie-loon.conf
 
 [Script]
 cron "*/11 * * * *" script-path=https://raw.githubusercontent.com/xingliuchao/jd/main/QQread.js, tag=QQ阅读小程序多开
