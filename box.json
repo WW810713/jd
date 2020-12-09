@@ -36,8 +36,8 @@
         "desc": "要同时跑几个账号"
       }
     ],
-      "repo": "https://raw.githubusercontent.com/xingliuchao/jd/main/QQread.js",
-      "icons": ["https://raw.githubusercontent.com/Orz-3/mini/master/QQ.png", "https://raw.githubusercontent.com/Orz-3/task/master/QQ.png"]  
+      "repo": ["https://raw.githubusercontent.com/xingliuchao/jd/main/QQreadH.js", "https://raw.githubusercontent.com/xingliuchao/jd/main/QQread.js"],
+      "icons": ["https://raw.githubusercontent.com/Orz-3/mini/master/QQ.png"]  
     }
   ]
 }
