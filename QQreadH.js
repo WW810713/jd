@@ -1,5 +1,9 @@
 */
 
+hostname=mqqapi.reader.qq.com
+
+*/
+
 const jsname='QQ读书小程序H'
 const $ = Env(jsname)
 
