@@ -12,102 +12,115 @@
 
 */
 
+hostname=mqqapi.reader.qq.com
 
-const jsname='QQ读书小程序多开'
+############## 圈x
+
+#企鹅读书获取cookie
+https:\/\/mqqapi\.reader\.qq\.com\/mqq\/user\/init url script-request-header https://raw.githubusercontent.com
+
+#企鹅读书获取时长cookie
+https:\/\/mqqapi\.reader\.qq\.com\/mqq\/addReadTimeWithBid? url script-request-header https://raw.githubusercontent.com
+
+
+############## loon
+
+//企鹅读书获取cookie
+http-request https:\/\/mqqapi\.reader\.qq\.com\/mqq\/user\/init script-path=https://raw.githubusercontent.com,requires-header=true, tag=企鹅读书获取cookie 
+
+//企鹅读书获取时长cookie
+http-request https:\/\/mqqapi\.reader\.qq\.com\/mqq\/addReadTimeWithBid? script-path=https://raw.githubusercontent.com, requires-header=true, tag=企鹅读书获取时长cookie
+
+
+############## surge
+
+//企鹅读书获取cookie
+企鹅读书 = type=http-request,pattern=https:\/\/mqqapi\.reader\.qq\.com\/mqq\/user\/init,script-path=https://raw.githubusercontent.com, requires-header=true
+
+//企鹅读书获取时长cookie
+企鹅读书 = type=http-request,pattern=https:\/\/mqqapi\.reader\.qq\.com\/mqq\/addReadTimeWithBid?,script-path=https://raw.githubusercontent.com, requires-header=true
+
+
+*/
+
+const jsname='QQ读书小程序8'
 const $ = Env(jsname)
 
-const QQlogs = $.getdata('QQlogs');   
+console.log(`\n========= 脚本执行时间(TM)：${new Date(new Date().getTime() + 0 * 60 * 60 * 1000).toLocaleString('zh', {hour12: false})} =========\n`)
 
-const notifyInterval=$.getdata('notifyInterval'); 
+const logs = 0;   //0为关闭日志，1为开启
+const notifyInterval=3
+//0为关闭通知，1为所有通知，2为宝箱领取成功通知，3为宝箱每15次通知一次
 
-const dd=1//单次任务延迟,默认1秒
-
+const jbid=1//换号则修改这个值,默认账号1
+const dd=8//单次任务延迟,默认1秒
 const TIME=30//单次时长上传限制，默认5分钟
-
 const maxtime=20//每日上传时长限制，默认20小时
-
 const wktimess=1200//周奖励领取标准，默认1200分钟
-
-const jbidhj=$.getdata('jbidhj'); 
-
-const zhs=$.getdata('zhs'); 
-
 var tz=''
-var index=zhs+2;
-var index1=zhs+1;
 
- function xxx()
+const qqreadurlKey = 'qqreadurl'+jbid
+const qqreadurlVal = $.getdata(qqreadurlKey)
 
- {
-   
-   for(var i=0;i<index;i++)
- { (function(i) {
-            setTimeout(function() {
+const qqreadheaderKey = 'qqreadhd'+jbid
+const qqreadheaderVal= $.getdata(qqreadheaderKey)
 
+const qqreadtimeurlKey = 'qqreadtimeurl'+jbid
+const qqreadtimeurlVal = $.getdata(qqreadtimeurlKey)
 
-jbid=jbidhj[i];
-
- qqreadurlVal = $.getdata('qqreadurl'+jbid)
+const qqreadtimeheaderKey = 'qqreadtimehd'+jbid
+const qqreadtimeheaderVal= $.getdata(qqreadtimeheaderKey)
 
 
- qqreadheaderVal= $.getdata('qqreadhd'+jbid)
+//CK运行
+let isGetCookie = typeof $request !== 'undefined'
+if (isGetCookie) {
+   GetCookie()
+} else {
+   all()
+}
 
- 
- qqreadbodyVal = $.getdata('qqreadbody'+jbid)
+function GetCookie() {
 
+   if($request &&$request.url.indexOf("init")>=0) {
 
-qqreadtimeurlVal =$.getdata('qqreadtimeurl'+jbid)
+  const qqreadurlVal = $request.url
+if (qqreadurlVal)        $.setdata(qqreadurlVal,qqreadurlKey)
+    $.log(`[${jsname}] 获取url请求: 成功,qqreadurlVal: ${qqreadurlVal}`)
 
+  const qqreadbodyVal = $request.body
+    if (qqreadbodyVal)   $.setdata(qqreadbodyVal,qqreadbodyKey)
+    $.log(`[${jsname}] 获取阅读: 成功,qqreadbodyVal: ${qqreadbodyVal}`)
 
-qqreadtimeheaderVal=$.getdata('qqreadtimehd'+jbid)
+    
+ const qqreadheaderVal = JSON.stringify($request.headers)
+    if (qqreadheaderVal)  $.setdata(qqreadheaderVal,qqreadheaderKey)
+    $.log(`[${jsname}] 获取Cookie: 成功,qqreadheaderVal: ${qqreadheaderVal}`)
+    $.msg(qqreadheaderKey, `获取cookie: 成功🎉`, ``)
+  
+}
 
+else if($request &&$request.url.indexOf("addReadTimeWithBid?")>=0) {
+ const qqreadtimeurlVal = $request.url
+if (qqreadtimeurlVal)   $.setdata(qqreadtimeurlVal,qqreadtimeurlKey)
+    $.log(`[${jsname}] 获取阅读时长url: 成功,qqreadtimeurlVal: ${qqreadtimeurlVal}`)
 
-all();
-
-
-
-if (i%2== 0) fgx()
-
-if (i== zhs) showmsg()
-
-if (i== index1) $.done()
+const qqreadtimeheaderVal = JSON.stringify($request.headers)
+    if (qqreadtimeheaderVal)        $.setdata(qqreadtimeheaderVal,qqreadtimeheaderKey)
+    $.log(`[${jsname}] 获取时长header: 成功,qqreadtimeheaderVal: ${qqreadtimeheaderVal}`)
+    $.msg(qqreadtimeheaderKey, `获取阅读时长cookie: 成功🎉`, ``)
 
  }
 
-
-
-, (i + 1) *17000);
-                })(i)
-
-
-
-
-
-
 }
 
 
-}
-
-
-xxx()
-
-
-
-function fgx() {
-
-      
-tz+='😀'+'\n'
-
-
-    
-  }  
 
 
 function all()
 
  {
-   for(var i=0;i<16;i++)
+   for(var i=0;i<18;i++)
  { (function(i) {
             setTimeout(function() {
      if (i==0)
@@ -158,6 +171,12 @@ qqreadwktime();//周时长查询
 else if (i==15)
 qqreadpick();//领周时长奖励
 
+else if (i==16)
+showmsg();//通知
+
+else if (i==17)
+$.done();//结束
+
     }
 , (i + 1) *dd*1000);
                 })(i)
@@ -172,8 +191,7 @@ return new Promise((resolve, reject) => {
    headers: JSON.parse(qqreadheaderVal),    
  timeout:60000};
    $.get(toqqreadtaskurl,(error, response, data) =>{
-     if(QQlogs=="true")  $.log(`${jsname}, 任务列表: ${data}`)
-			
+     if(logs) $.log(`${jsname}, 任务列表: ${data}`)
      task =JSON.parse(data)
 tz+=
 '【现金余额】:'+
@@ -247,7 +265,7 @@ return new Promise((resolve, reject) => {
     headers: JSON.parse(qqreadheaderVal),    
  timeout:60000};
    $.get(toqqreadinfourl,(error, response, data) =>{
-     if(QQlogs=="true") $.log(`${jsname}, 用户名: ${data}`)
+     if(logs) $.log(`${jsname}, 用户名: ${data}`)
      info =JSON.parse(data)
 tz+=
 '【用户信息】:'+info.data.user.nickName+'\n'
@@ -265,7 +283,7 @@ return new Promise((resolve, reject) => {
     headers: JSON.parse(qqreadheaderVal),
    timeout:60000};
    $.post(toqqreadtakeurl,(error, response, data) =>{
-     if(QQlogs=="true") $.log(`${jsname}, 阅豆签到: ${data}`)
+     if(logs) $.log(`${jsname}, 阅豆签到: ${data}`)
      take =JSON.parse(data)
 if (take.data.takeTicket>0)
  {
@@ -287,7 +305,7 @@ return new Promise((resolve, reject) => {
     headers: JSON.parse(qqreadheaderVal),
     };
    $.get(toqqreadconfigurl,(error, response, data) =>{
-     if(QQlogs=="true") $.log(`${jsname}, 阅读时长查询: ${data}`)
+     if(logs) $.log(`${jsname}, 阅读时长查询: ${data}`)
      config =JSON.parse(data)
    if (config.code==0)
 tz+='【时长查询】:今日阅读'+(config.data.pageParams.todayReadSeconds/60).toFixed(0)+'分钟\n'
@@ -309,7 +327,7 @@ return new Promise((resolve, reject) => {
     };
 	
    $.get(toqqreadtimeurl,(error, response, data) =>{
-     if(QQlogs=="true") $.log(`${jsname}, 阅读时长: ${data}`)
+     if(logs) $.log(`${jsname}, 阅读时长: ${data}`)
      time =JSON.parse(data)
      if (time.code==0)
 tz+='【阅读时长】:上传'+TIME/6+'分钟\n'
@@ -330,7 +348,7 @@ return new Promise((resolve, reject) => {
 if (config.data.pageParams.todayReadSeconds/60>=1){
 
    $.get(toqqreadssr1url,(error, response, data) =>{
-     if(QQlogs=="true") $.log(`${jsname}, 金币奖励1: ${data}`)
+     if(logs) $.log(`${jsname}, 金币奖励1: ${data}`)
      ssr1 =JSON.parse(data)
 	if (ssr1.data.amount>0)   
 tz+='【阅读金币1】获得'+ssr1.data.amount+'金币\n'
@@ -352,7 +370,7 @@ return new Promise((resolve, reject) => {
 if (config.data.pageParams.todayReadSeconds/60>=5){
 
    $.get(toqqreadssr2url,(error, response, data) =>{
-     if(QQlogs=="true") $.log(`${jsname}, 金币奖励2: ${data}`)
+     if(logs) $.log(`${jsname}, 金币奖励2: ${data}`)
      ssr2 =JSON.parse(data)
 	if (ssr2.data.amount>0)   
 tz+='【阅读金币2】获得'+ssr2.data.amount+'金币\n'
@@ -374,7 +392,7 @@ return new Promise((resolve, reject) => {
 if (config.data.pageParams.todayReadSeconds/60>=30){
 
    $.get(toqqreadssr3url,(error, response, data) =>{
-     if(QQlogs=="true") $.log(`${jsname}, 金币奖励3: ${data}`)
+     if(logs) $.log(`${jsname}, 金币奖励3: ${data}`)
      ssr3 =JSON.parse(data)
 	if (ssr3.data.amount>0)   
 tz+='【阅读金币3】获得'+ssr3.data.amount+'金币\n'
@@ -394,7 +412,7 @@ return new Promise((resolve, reject) => {
     headers: JSON.parse(qqreadheaderVal),
    timeout:60000};
    $.get(toqqreadsignurl,(error, response, data) =>{
-     if(QQlogs=="true") $.log(`${jsname}, 金币签到: ${data}`)
+     if(logs) $.log(`${jsname}, 金币签到: ${data}`)
      sign =JSON.parse(data)
 
 if (sign.data.videoDoneFlag)
@@ -417,7 +435,7 @@ return new Promise((resolve, reject) => {
     headers: JSON.parse(qqreadheaderVal),
    timeout:60000};
    $.get(toqqreadsign2url,(error, response, data) =>{
-     if(QQlogs=="true") $.log(`${jsname}, 金币签到翻倍: ${data}`)
+     if(logs) $.log(`${jsname}, 金币签到翻倍: ${data}`)
      sign2 =JSON.parse(data)
 
 if (sign2.code==0)
@@ -439,7 +457,7 @@ return new Promise((resolve, reject) => {
     headers: JSON.parse(qqreadheaderVal),
    timeout:60000};
    $.get(toqqreaddayreadurl,(error, response, data) =>{
-     if(QQlogs=="true") $.log(`${jsname}, 每日阅读: ${data}`)
+     if(logs) $.log(`${jsname}, 每日阅读: ${data}`)
      dayread =JSON.parse(data)
 if (dayread.code==0)
  {
@@ -461,7 +479,7 @@ return new Promise((resolve, reject) => {
     headers: JSON.parse(qqreadheaderVal),
    timeout:60000};
    $.get(toqqreadvideourl,(error, response, data) =>{
-     if(QQlogs=="true") $.log(`${jsname}, 视频奖励: ${data}`)
+     if(logs) $.log(`${jsname}, 视频奖励: ${data}`)
      video =JSON.parse(data)
 
 if (video.code==0)
@@ -486,7 +504,7 @@ return new Promise((resolve, reject) => {
     headers: JSON.parse(qqreadheaderVal),
    timeout:60000};
    $.get(toqqreadboxurl,(error, response, data) =>{
-     if(QQlogs=="true") $.log(`${jsname}, 宝箱奖励: ${data}`)
+     if(logs) $.log(`${jsname}, 宝箱奖励: ${data}`)
      box =JSON.parse(data)
 
 if (box.data.count>=0)
@@ -510,7 +528,7 @@ return new Promise((resolve, reject) => {
     headers: JSON.parse(qqreadheaderVal),
    timeout:60000};
    $.get(toqqreadbox2url,(error, response, data) =>{
-     if(QQlogs=="true") $.log(`${jsname}, 宝箱奖励翻倍: ${data}`)
+     if(logs) $.log(`${jsname}, 宝箱奖励翻倍: ${data}`)
      box2 =JSON.parse(data)
 
 if (box2.code==0)
@@ -537,7 +555,7 @@ return new Promise((resolve, reject) => {
     };
 
    $.get(toqqreadwktimeurl,(error, response, data) =>{
-     if(QQlogs=="true") $.log(`${jsname}, 阅读时长: ${data}`)
+     if(logs) $.log(`${jsname}, 阅读时长: ${data}`)
      wktime =JSON.parse(data)
      if (wktime.code==0)
 tz+='【本周阅读时长】:'+wktime.data.readTime+'分钟\n'
@@ -558,7 +576,7 @@ return new Promise((resolve, reject) => {
 
 if (wktime.data.readTime>=wktimess){
     $.get(toqqreadpickurl,(error, response, data) =>{
-     if(QQlogs=="true") $.log(`${jsname},周阅读时长奖励任务: ${data}`)
+     if(logs) $.log(`${jsname},周阅读时长奖励任务: ${data}`)
      pick =JSON.parse(data)
      if (pick.data[7].isPick==true)
 tz+='【周时长奖励】:已全部领取\n'
@@ -572,7 +590,7 @@ const toqqreadPackageurl = {
     headers: JSON.parse(qqreadheaderVal),   
  timeout:60000};
     $.get(toqqreadPackageurl,(error, response, data) =>{
-     if(QQlogs=="true") $.log(`${jsname}, 领周阅读时长: ${data}`)
+     if(logs) $.log(`${jsname}, 领周阅读时长: ${data}`)
      Package =JSON.parse(data)
      if (Package.code==0)
 tz+='【周时长奖励'+(i+1)+'】:领取'+Packageid[i]+'阅豆\n'    
