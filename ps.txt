@@ -1,6 +1,16 @@
-😀在重写引用里添加：https://raw.githubusercontent.com/xingliuchao/jd/main/QQreadCookie.conf
+😀圈叉
 
+在重写引用里添加：https://raw.githubusercontent.com/xingliuchao/jd/main/QQreadCookie.conf
 
-task
-
+[task]
 */11 * * * * https://raw.githubusercontent.com/xingliuchao/jd/main/QQread.js, tag=QQ阅读小程序多开, enabled=true
+
+
+
+
+😀loon
+
+使用方法:打开APP，顶部的配置 -> 脚本 -> 订阅脚本- > 点击右上角+号 -> 添加url链接  https://raw.githubusercontent.com/xingliuchao/jd/main/QQreadcookie-loon.conf
+
+[Script]
+cron "*/11 * * * *" script-path=https://raw.githubusercontent.com/xingliuchao/jd/main/QQread.js, tag=QQ阅读小程序多开
