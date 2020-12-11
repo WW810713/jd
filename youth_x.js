@@ -22,6 +22,7 @@ hostname = *.youth.cn, ios.baertt.com
 
 let s = 200 //各数据接口延迟
 const $ = new Env("中青看点")
+$.idx = ($.idx = ($.getval('qeSuffix') || '1') - 1) > 0 ? ($.idx + 1 + '') : '';
 let notifyInterval = $.getdata("notifytimes")||50 //通知间隔，默认抽奖每50次通知一次，如需关闭全部通知请设为0
 const YOUTH_HOST = "https://kd.youth.cn/WebApi/";
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -31,6 +32,7 @@ let cookiesArr = [], signheaderVal = '',
     timeArr = [], timebodyVal = '',
     redpArr = [], redpbodyVal = '',
     detail = ``, subTitle = ``;
+
 let CookieYouth = [], ARTBODYs = [], 
     REDBODYs  = [], READTIME = [];
 if ($.isNode()) {
@@ -84,10 +86,10 @@ if ($.isNode()) {
       console.log(`============ 脚本执行-国际标准时间(UTC)：${new Date().toLocaleString()}  =============\n`)
       console.log(`============ 脚本执行-北京时间(UTC+8)：${new Date(new Date().getTime() + 8 * 60 * 60 * 1000).toLocaleString()}  =============\n`)
     } else {
-    cookiesArr.push($.getdata('youthheader_zq'));
-    redpArr.push($.getdata('red_zq'));
-    readArr.push($.getdata('read_zq'));
-    timeArr.push($.getdata('readtime_zq'));
+    cookiesArr.push($.getdata('youthheader_zq${i}'));
+    redpArr.push($.getdata('red_zq${i}'));
+    readArr.push($.getdata('read_zq${i}'));
+    timeArr.push($.getdata('readtime_zq${i}'));
 }
 
 const firstcheck = $.getdata('signt');
@@ -101,7 +103,7 @@ if (isGetCookie = typeof $request !== 'undefined') {
 
  !(async () => {
   if (!cookiesArr[0]) {
-    $.msg($.name, '【提示】请先获取中青看点一cookie')
+    $.msg($.name$.idx, '【提示】请先获取中青看点一cookie')
     return;
   }
   for (let i = 0; i < cookiesArr.length; i++) {
@@ -140,7 +142,7 @@ else if ($.time('HH')>4&&$.time('HH')<8){
   await showmsg();
   if ($.isNode()&&rotaryres.code !== '10010')
     if( rotarytimes && rotarytimes%50 == 0 && cash >= 10){
-       await notify.sendNotify($.name + " " + nick, "您的余额约为"+cash+"元，已可以提现"+'\n'+`【收益总计】${signinfo.data.user.score}青豆  现金约${cash}元\n${detail}`)
+       await notify.sendNotify($.name$.idx + " " + nick, "您的余额约为"+cash+"元，已可以提现"+'\n'+`【收益总计】${signinfo.data.user.score}青豆  现金约${cash}元\n${detail}`)
     }
  }
 })()
@@ -152,26 +154,26 @@ function GetCookie() {
    if ($request && $request.method != `OPTIONS`&& $request.url.match(/\/TaskCenter\/(sign|getSign)/)) {
    const signheaderVal = JSON.stringify($request.headers)
     if (signheaderVal)        $.setdata(signheaderVal,'youthheader_zq')
-    $.log(`${$.name} 获取Cookie: 成功,signheaderVal: ${signheaderVal}`)
-    $.msg($.name, `获取Cookie: 成功🎉`, ``)
+    $.log(`${$.name$.idx} 获取Cookie: 成功,signheaderVal: ${signheaderVal}`)
+    $.msg($.name$.idx, `获取Cookie: 成功🎉`, ``)
   }
 else if ($request && $request.method != `OPTIONS`&& $request.url.match(/\/article\/complete/)) {
    const articlebodyVal = $request.body
     if (articlebodyVal)        $.setdata(articlebodyVal,'read_zq')
-    $.log(`${$.name} 获取阅读: 成功,articlebodyVal: ${articlebodyVal}`)
-    $.msg($.name, `获取阅读请求: 成功🎉`, ``)
+    $.log(`${$.name$.idx} 获取阅读: 成功,articlebodyVal: ${articlebodyVal}`)
+    $.msg($.name$.idx, `获取阅读请求: 成功🎉`, ``)
   }
 else if ($request && $request.method != `OPTIONS`&& $request.url.match(/\/v5\/user\/app_stay/)) {
    const timebodyVal = $request.body
     if (timebodyVal)        $.setdata(timebodyVal,'readtime_zq')
-    $.log(`${$.name} 获取阅读: 成功,timebodyVal: ${timebodyVal}`)
-    $.msg($.name, `获取阅读时长: 成功🎉`, ``)
+    $.log(`${$.name$.idx} 获取阅读: 成功,timebodyVal: ${timebodyVal}`)
+    $.msg($.name$.idx, `获取阅读时长: 成功🎉`, ``)
   }
 else if ($request && $request.method != `OPTIONS`&& $request.url.match(/\/article\/red_packet/)) {
    const redpbodyVal = $request.body
     if (redpbodyVal)        $.setdata(redpbodyVal, 'red_zq')
-    $.log(`${$.name} 获取惊喜红包: 成功,redpbodyVal: ${redpbodyVal}`)
-    $.msg($.name, `获取惊喜红包请求: 成功🎉`, ``)
+    $.log(`${$.name$.idx} 获取惊喜红包: 成功,redpbodyVal: ${redpbodyVal}`)
+    $.msg($.name$.idx, `获取惊喜红包请求: 成功🎉`, ``)
   }
  }
 
@@ -186,7 +188,7 @@ function sign() {
         const date =  $.time(`MMdd`)
             if (signres.status == 2) {
                 signresult = `签到失败，Cookie已失效‼️`;
-                $.msg($.name, signresult, "");
+                $.msg($.name$.idx, signresult, "");
                 return;
             } else if (signres.status == 1) {
                  signresult = `【签到结果】成功 🎉 明日+${signres.nextScore} `
@@ -681,12 +683,12 @@ function earningsInfo() {
 }
 async function showmsg() {
        if (rotaryres.status == 1 && rotarytimes >= 97) {
-            $.msg($.name + " " + nick, subTitle, detail)  //默认前三次为通知
+            $.msg($.name$.idx + " " + nick, subTitle, detail)  //默认前三次为通知
         }else if (rotaryres.status == 1 && rotarytimes % notifyInterval == 0) {
-        $.msg($.name + " " + nick, subTitle, detail) //转盘次数/间隔整除时通知;
+        $.msg($.name$.idx + " " + nick, subTitle, detail) //转盘次数/间隔整除时通知;
         }else if (rotaryres.code == 10010 && notifyInterval != 0) {
          rotarynum = ` 转盘${rotaryres.msg}🎉`
-         $.msg($.name+"  "+nick+" "+rotarynum,subTitle,detail)//任务全部完成且通知间隔不为0时通知;
+         $.msg($.name$.idx+"  "+nick+" "+rotarynum,subTitle,detail)//任务全部完成且通知间隔不为0时通知;
         } 
      else {
        console.log(`【收益总计】${signinfo.data.user.score}青豆  现金约${cash}元\n`+ detail)
