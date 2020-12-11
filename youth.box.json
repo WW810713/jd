@@ -44,8 +44,8 @@
        ],
       "repo": "https://github.com/xingliuchao/jd/blob/main/youth_x.js",
       "icons": ["https://raw.githubusercontent.com/Orz-3/mini/master/youth.png", "https://raw.githubusercontent.com/Orz-3/task/master/youth.png"],
-      "script": "https://gitee.com/Sunert/Scripts/raw/master/Task/youth.js",
-      "author": "@sunert"
+      "script": "https://raw.githubusercontent.com/xingliuchao/jd/main/youth_x.js",
+      "author": "@xingliuchao---sunert"
     },
   ]
 }
