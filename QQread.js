@@ -1,5 +1,22 @@
 /* 源码ziye
 
+//使用方法：
+//1.浏览器打开 https://m.q.qq.com/a/s/f9726d0a930319a7dd35bbcc8e42dc60 
+
+//2.重写引用https://raw.githubusercontent.com/xingliuchao/jd/main/QQreadCookie.conf
+
+//--书库-进一本书看 5秒左右 然后返回，获取body和cookie
+
+//🐕获取cookie然后注释本重写就行了！
+
+//多账号在boxjs里订阅https://raw.githubusercontent.com/xingliuchao/jd/main/box.json
+
+
+---------------------------------------------------------------------------------------------------------
+
+
+hostname=mqqapi.reader.qq.com
+
 Secrets对应关系如下，多账号默认换行
 
 qqreadbodyVal         👉   QQREAD_BODY
