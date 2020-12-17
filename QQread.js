@@ -5,11 +5,12 @@
 
 //2.重写引用https://raw.githubusercontent.com/xingliuchao/jd/main/QQreadCookie.conf
 
-//--书库-进一本书看 5秒左右 然后返回，获取body和cookie
+//--书库-进一本书看 5秒左右 然后返回，获取body和cookie 共3条
 
-//🐕获取cookie然后注释本重写就行了！
+//🐕获取body和cookie然后注释本重写就行了！
 
-//多账号在boxjs里订阅https://raw.githubusercontent.com/xingliuchao/jd/main/box.json
+//多账号在boxjs里订阅
+//https://raw.githubusercontent.com/xingliuchao/jd/main/box.json
 
 
 ---------------------------------------------------------------------------------------------------------
