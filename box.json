@@ -14,10 +14,10 @@
         "使用说明：",
 	      "为了一步到位成功，❗请按以下步骤操作❗，尽量避免出错。老鸟飘过(*^_^*)",
         "1.Cookie获取方式【<a href=\"https://m.q.qq.com/a/s/f9726d0a930319a7dd35bbcc8e42dc60 \">点我打开</a>】已测试圈叉与loon.",
-	"2.点开【<a href=\"https://raw.githubusercontent.com/xingliuchao/jd/main/ps.txt\">ps.txt</a>】添加引用获取Cookie与Task.",			
+	"2.点开【<a href=\"https://raw.githubusercontent.com/xingliuchao/jd/main/ps.txt\">ps.txt</a>】添加引用获取Cookie与Task.注意要启用→重写引用",			
         "3.在以下要抓账号中填写要获取的序号",
 	"4.从书库看①本📕新书📕新书！！看5秒然后左上角返回，获取cookie与body❀共3项。☞保存设置😀",
-	"5.切换QQ账号♥♥循环1-3-4（2已引用，不必重复）重新获取下个账号."		
+	"5.切换QQ账号♥♥循环1-3-4（2已引用，不必重复）重新获取下个账号.可以N多账号，6后面直接填写7..."		
                         ],
       "keys": ["qqreadbd", "qqreadtimeurl", "qqreadtimehd", "qqreadbd2", "qqreadtimeurl2", "qqreadtimehd2", "qqreadbd3", "qqreadtimeurl3", "qqreadtimehd3", "qqreadbd4", "qqreadtimeurl4", "qqreadtimehd4", "qqreadbd5", "qqreadtimeurl5", "qqreadtimehd5", "qqreadhd6", "qqreadbd6", "qqreadtimeurl6", "qqreadtimehd6"],
        "settings": [{
