@@ -2,14 +2,12 @@ const $ = new Env('互助码')
 $.zdUrl = 'http://api.turinglabs.net/api/v1/jd/bean/create/olmijoxgmjutzr2rlylpnfhsdfcqe2scndhws3i/'
 $.ncUrl = 'http://api.turinglabs.net/api/v1/jd/farm/create/11702238f4624a9a92e7494483515a00/'
 $.mcUrl = 'http://api.turinglabs.net/api/v1/jd/pet/create/MTAxODc2NTEzMjAwMDAwMDAyNzIyNzE1Mw==/'
-$.zzUrl = 'https://code.chiang.fun/api/v1/jd/jdzz/create/AUWE5ma2Sm2FaCWesiyhMnA/'
 $.result = []
 
 !(async () => {
   await createZd()
   await createNc()
   await createMc()
-  await createZz()
   await showMsg()
 })()
   .catch((e) => $.logErr(e))
@@ -57,25 +55,6 @@ function createNc() {
 function createMc() {
   return new Promise((resolve) => {
     const url = { url: $.mcUrl }
-    $.get(url, (err, resp, data) => {
-      try {
-        const _data = JSON.parse(data)
-        if (_data) {
-          $.result.push(_data.message)
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve()
-      }
-    })
-  })
-}
-
-// 京东赚赚
-function createMc() {
-  return new Promise((resolve) => {
-    const url = { url: $.zzUrl }
     $.get(url, (err, resp, data) => {
       try {
         const _data = JSON.parse(data)
