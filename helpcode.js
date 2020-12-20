@@ -9,7 +9,7 @@ $.result = []
   await createZd()
   await createNc()
   await createMc()
-   await createZz()
+  await createZz()
   await showMsg()
 })()
   .catch((e) => $.logErr(e))
