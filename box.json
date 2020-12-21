@@ -45,8 +45,8 @@
 	  "仅辅助使用，🚗本脚本来自ziye，感谢付出🚗 邀请码  48635465 填写后都会有金币奖励，ziye99558995",
           "需要获取的东西较多，请耐心操作，细心读完，避免失败",
 	      "为了一步到位成功，❗请按以下步骤操作❗，尽量避免出错。老鸟飘过(*^_^*)",
-              "🚗.Cookie获取方式【<a href=\"http://athm.cn/z5tSeuc \">点我打开，进入app</a>】已测试圈叉与loon.",
-	      "🚗.点开【<a href=\"https://raw.githubusercontent.com/xingliuchao/jd/main/ps.txt\">ps.txt</a>】添加引用获取Cookie与Task.注意要启用→重写引用.❗成功header后禁用该条引用",	
+              "a.Cookie获取方式【<a href=\"http://athm.cn/z5tSeuc \">点我打开，进入app</a>】已测试圈叉与loon.",
+	      "b.点开【<a href=\"https://raw.githubusercontent.com/xingliuchao/jd/main/ps.txt\">ps.txt</a>】添加引用获取Cookie与Task.注意要启用→重写引用.❗成功header后禁用该条引用",	
            "1.我>>获取用户名header",
            "2.活动>>分享赚现金 自己助力自己 获取助力任务header",
 	   "3.注释header重写，添加两个body重写",
@@ -54,19 +54,8 @@
 	   "5.首页>>右上角 获取时段 时段翻倍body",
 	   "6.活动>>分享赚现金 自己助力自己 获取助力任务body" ,
 	   "7.活动>>现金收入>>提现>>立即提现 获取提现body"],
-      "author": "@xingliuchao",
-       "settings": [ 
-	 {
-         "id": "notifyInterval",
-         "name": "通知频率 (点击查看设置说明)",
-         "val": "1",
-         "type": "number",
-         "desc": "设置0为无通知，设置1为全部通知"
-         }],     
-      "repo": "https://github.com/ziye12/QCZJSPEED/blob/main/Task/qczjspeed.js",
-       "icons": ["https://raw.githubusercontent.com/xingliuchao/jd/main/png/carhome.png", "https://raw.githubusercontent.com/xingliuchao/jd/main/xingliuchao.png"],
-       "script": "https://raw.githubusercontent.com/ziye12/QCZJSPEED/main/Task/qczjspeed.js"  
-     }      
+      "author": "@xingliuchao"
+   }      
 	   
  ]
 }
