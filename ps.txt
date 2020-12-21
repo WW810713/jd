@@ -1,16 +1,30 @@
 😀圈叉
 
-在重写引用里添加：https://raw.githubusercontent.com/xingliuchao/jd/main/QQreadCookie.conf
+QQ🐧阅读---在重写引用里添加：https://raw.githubusercontent.com/xingliuchao/jd/main/QQreadCookie.conf
+
+🚗之家极速---在重写引用里添加：https://raw.githubusercontent.com/xingliuchao/jd/main/ctrl-cookie.conf  获取header后❗重写禁用
+🚗之家极速---在重写引用里添加：https://raw.githubusercontent.com/xingliuchao/jd/main/ReadCookie.conf   获取body重写
+
+
 
 [task]
 */11 * * * * https://raw.githubusercontent.com/xingliuchao/jd/main/QQread.js, tag=QQ阅读小程序多开, enabled=true
 
+*/10 * * * * https://raw.githubusercontent.com/ziye12/QCZJSPEED/master/Task/qczjspeed.js, tag=汽车之家, enabled=true
 
-
+---------------------------------------------------------------------------------------------------------------------------------------------------
 
 😀loon
 
-配置 -> 脚本 -> 订阅脚本- > 点击右上角+号 -> 添加url链接  https://raw.githubusercontent.com/xingliuchao/jd/main/QQreadcookie-loon.conf
+配置 -> 脚本 -> 订阅脚本- > 点击右上角+号 -> 添加url链接  
+
+QQ🐧阅读----- https://raw.githubusercontent.com/xingliuchao/jd/main/QQreadcookie-loon.conf
+
+
+🚗之家极速--- https://raw.githubusercontent.com/xingliuchao/jd/main/ctrl-cookie-loon.conf 获取header后❗重写禁用
+🚗之家极速---在重写引用里添加：https://raw.githubusercontent.com/xingliuchao/jd/main/ReadCookie-loon.conf   获取body重写
+
 
 [Script]
 cron "*/11 * * * *" script-path=https://raw.githubusercontent.com/xingliuchao/jd/main/QQread.js, tag=QQ阅读小程序多开
+cron "*/10 * * * *" script-path=https://raw.githubusercontent.com/ziye12/QCZJSPEED/master/Task/qczjspeed.js, tag=汽车之家
