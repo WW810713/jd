@@ -4,11 +4,9 @@
   "author": "@xingliuchao",
   "icon": "https://avatars3.githubusercontent.com/u/62364023?s=460&u=dd3390d84bbb1774f3f8692e0ec57dcfea3c2a0c&v=4",
   "repo": "https://github.com/xingliuchao/jd/tree/main",
-  "apps": [
-	
-					
+  "apps": [				
     {
-      "id": "read_cookie",
+      "id": "QQread",
       "name": "QQ阅读多账号(自用)",
       "descs_html": [
         "使用说明：",
