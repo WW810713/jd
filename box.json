@@ -5,31 +5,6 @@
   "icon": "https://avatars3.githubusercontent.com/u/62364023?s=460&u=dd3390d84bbb1774f3f8692e0ec57dcfea3c2a0c&v=4",
   "repo": "https://github.com/xingliuchao/jd/tree/main",
   "apps": [
-    {
-      "id": "qczjspeed",
-      "name": "🚗之家极速版",
-       "keys": ["GetUserInfourl", "GetUserInfoheader", "coinbody", "accountManageheader", "taskbody", "activitybody", "addCoinbody", "addCoin2body", "reportAssbody", "reportAssheader", "cointowalletbody","GetUserInfourl2", "GetUserInfoheader2", "coinbody2", "accountManageheader2", "taskbody2", "activitybody2", "addCoinbody2", "addCoin2body2", "reportAssbody2", "reportAssheader2", "cointowalletbody2"],
-       "author": "@xingliuchao",
-       "settings": [ 
-             {
-        "id": "qczjSuffix",
-        "name": "要抓账号",
-        "val": "1",
-        "type": "number",
-        "desc": "当前要抓取cookie的账号序号，如：1、2、3、4"
-          },
-          {
-        "id": "qczjCount",
-        "name": "运行账号个数",
-        "val": "1",
-        "type": "number",
-        "desc": "要同时跑几个账号"
-              } ],
-       "repo": "https://github.com/ziye12/QCZJSPEED/blob/main/Task/qczjspeed.js",
-        "icons": ["https://raw.githubusercontent.com/xingliuchao/jd/main/png/carhome.png", "https://raw.githubusercontent.com/xingliuchao/jd/main/xingliuchao.png"],
-       "script": "https://raw.githubusercontent.com/ziye12/QCZJSPEED/main/Task/qczjspeed.js"  
-     },
-	  
       {
       "id": "cookie",
       "name": "QQ阅读多账号(自用)",
