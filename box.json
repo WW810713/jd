@@ -6,9 +6,9 @@
   "repo": "https://github.com/xingliuchao/jd/tree/main",
   "apps": [
     {
-    "id": "qczjspeed",
-    "name": "🚗之家极速版",
-    "descs_html": [
+      "id": "qczjspeed",
+      "name": "🚗之家极速版",
+      "descs_html": [
        "使用说明：",
 	  "仅辅助使用，❗本脚本来自ziye，感谢付出❗  本邀请码  48635465  ，ziye码在脚本里面"
           "需要获取的东西较多，请耐心操作"
@@ -19,23 +19,23 @@
 	   "5.首页>>右上角 获取时段 时段翻倍body"
 	   "6.活动>>分享赚现金 自己助力自己 获取助力任务body" 
 	   "7.活动>>现金收入>>提现>>立即提现 获取提现body"],
-    "keys": ["GetUserInfourl", "GetUserInfoheader", "coinbody", "accountManageheader", "taskbody", "activitybody", "addCoinbody", "addCoin2body", "reportAssbody", "reportAssheader", "cointowalletbody","GetUserInfourl2", "GetUserInfoheader2", "coinbody2", "accountManageheader2", "taskbody2", "activitybody2", "addCoinbody2", "addCoin2body2", "reportAssbody2", "reportAssheader2", "cointowalletbody2"],
-    "author": "@xingliuchao",
-    "settings": [ 
-       {
+       "keys": ["GetUserInfourl", "GetUserInfoheader", "coinbody", "accountManageheader", "taskbody", "activitybody", "addCoinbody", "addCoin2body", "reportAssbody", "reportAssheader", "cointowalletbody","GetUserInfourl2", "GetUserInfoheader2", "coinbody2", "accountManageheader2", "taskbody2", "activitybody2", "addCoinbody2", "addCoin2body2", "reportAssbody2", "reportAssheader2", "cointowalletbody2"],
+       "author": "@xingliuchao",
+       "settings": [ 
+             {
         "id": "qczjSuffix",
         "name": "要抓账号",
         "val": "1",
         "type": "number",
         "desc": "当前要抓取cookie的账号序号，如：1、2、3、4"
-      },
-      {
+          },
+          {
         "id": "qczjCount",
         "name": "运行账号个数",
         "val": "1",
         "type": "number",
         "desc": "要同时跑几个账号"
-      } ],
+              } ],
        "repo": "https://github.com/ziye12/QCZJSPEED/blob/main/Task/qczjspeed.js",
         "icons": ["https://raw.githubusercontent.com/xingliuchao/jd/main/png/carhome.png", "https://raw.githubusercontent.com/xingliuchao/jd/main/xingliuchao.png"],
        "script": "https://raw.githubusercontent.com/ziye12/QCZJSPEED/main/Task/qczjspeed.js"  
@@ -67,13 +67,13 @@
         "val": "1",
         "type": "number",
         "desc": "要同时跑几个账号"
-      }
-    ],
+        }
+     ],
       "script": "https://raw.githubusercontent.com/xingliuchao/jd/main/QQread.js",
       "repo": ["https://github.com/xingliuchao/jd/blob/main/QQread.js"],
       "author": "@xingliuchao",    
       "icons": ["https://raw.githubusercontent.com/xingliuchao/jd/main/png/qi'e_read.png", "https://raw.githubusercontent.com/xingliuchao/jd/main/xingliuchao.png"]  
-    }	  
+   }	  
 	  
   ]
 }
