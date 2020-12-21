@@ -39,7 +39,7 @@
       "author": "@xingliuchao",    
       "icons": [
 	    "https://raw.githubusercontent.com/xingliuchao/jd/main/png/qi'e_read.png",
-		"https://raw.githubusercontent.com/xingliuchao/jd/main/xingliuchao.png"]
+	    "https://raw.githubusercontent.com/xingliuchao/jd/main/xingliuchao.png"
       ]
     },
     {
@@ -73,8 +73,8 @@
       ],
       "descs_html": [
         "使用说明：",
-       	  "仅辅助使用，❗本脚本来自ziye，感谢付出❗  本邀请码  48635465  ，ziye码在脚本里面"
-                 "需要获取的东西较多，请耐心操作"
+       	  "仅辅助使用，❗本脚本来自ziye，感谢付出❗  本邀请码  48635465  ，ziye码在脚本里面。"
+          "需要获取的东西较多，请耐心操作"
            "1.我>>钱包 获取用户名'钱包余额header"
            "2.活动>>分享赚现金 自己助力自己 获取助力任务header"
        	   "3.注释header重写，添加两个body重写"
