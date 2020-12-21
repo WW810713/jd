@@ -1,4 +1,6 @@
 /*
+仅自用---
+邀请码1465420698
 目前包含：
 签到
 开首页宝箱
@@ -331,7 +333,7 @@ return new Promise((resolve, reject) => {
     url: `https://api3-normal-c-lq.snssdk.com/luckycat/lite/v1/invite/post_invite_code/?_request_from=web&device_platform=ios&ac=4G&${signurl}`,
     headers :JSON.parse(farmkey),
       timeout: 60000,
-    body: JSON.stringify({"invitecode" : "1425840898"})
+    body: JSON.stringify({"invitecode" : "1465420698"})
 }
 
    $.post(invitatonurl,(error, response, data) =>{
