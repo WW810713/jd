@@ -21,13 +21,7 @@
 	   "7.活动>>现金收入>>提现>>立即提现 获取提现body"],
     "keys": ["GetUserInfourl", "GetUserInfoheader", "coinbody", "accountManageheader", "taskbody", "activitybody", "addCoinbody", "addCoin2body", "reportAssbody", "reportAssheader", "cointowalletbody","GetUserInfourl2", "GetUserInfoheader2", "coinbody2", "accountManageheader2", "taskbody2", "activitybody2", "addCoinbody2", "addCoin2body2", "reportAssbody2", "reportAssheader2", "cointowalletbody2"],
     "author": "@xingliuchao",
-    "settings": [ {
-         "id": "notify",
-         "name": "通知频率 (点击查看设置说明)",
-         "val": "",
-         "type": "number",
-         "desc": "设定通知频率，如设置0为无通知，设置1为全部通知"
-         },
+    "settings": [ 
        {
         "id": "qczjSuffix",
         "name": "要抓账号",
