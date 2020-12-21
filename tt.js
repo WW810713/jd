@@ -1,847 +1,755 @@
 /*
-测试一下
-签到、首页宝箱、阅读、睡觉、游戏
+目前包含：
+签到
+开首页宝箱
+读文章30篇（具体效果自测）
+开农场宝箱
+农场浇水
+done 农场离线奖励(农场宝箱开完后，需要进农场再运行脚本才能开，有点问题)
+##通过农场浇水激活上线，达到获取理想奖励目的，目前测试每天的离线奖励足够开启农场5个宝箱，不需要做其他任务，具体情况看后期是否需要，再添加除虫，开地，施肥，三餐奖励以及农场签到活动
+20点睡觉，获取完全后（3600）或睡觉12小时，自动醒来（防止封号）
+自动收取睡觉金币
+
+#右上角签到即可获取签到cookie
+#进一次农场即可获取农场cookie
+#读文章弹出金币获取读文章cookie
+
+[mitm]
+hostname = api3-normal-c-*.snssdk.com
+
+
+#圈x
+[rewrite local]
+^https:\/\/api3-normal-c-\w+\.snssdk\.com\/score_task\/v1\/task\/(sign_in|get_read_bonus) url script-request-header https://raw.githubusercontent.com/xingliuchao/jd/main/tt.js
+^https:\/\/api3-normal-c-\w+\.snssdk\.com\/ttgame\/game_farm\/home_info url script-request-header https://raw.githubusercontent.com/xingliuchao/jd/main/tt.js
+[task]
+5,35 8-23 * * * https://raw.githubusercontent.com/xingliuchao/jd/main/tt.js, tag=今日头条极速版, enabled=true
+
+#loon
+http-request ^https:\/\/api3-normal-c-\w+\.snssdk\.com\/score_task\/v1\/task\/(sign_in|get_read_bonus) script-path=https://raw.githubusercontent.com/xingliuchao/jd/main/tt.js, requires-body=true, timeout=10, tag=今日头条极速版sign
+http-request ^https:\/\/api3-normal-c-\w+\.snssdk\.com\/ttgame\/game_farm\/home_info script-path=https://raw.githubusercontent.com/xingliuchao/jd/main/tt.js, requires-body=true, timeout=10, tag=今日头条极速版farm
+cron "5,35 8-23 * * *" script-path=https://raw.githubusercontent.com/mandxy/ziyong/main/jrtt.js, tag=今日头条极速版
+
+#surge
+
+jrttsign = type=http-request,pattern=^https:\/\/api3-normal-c-\w+\.snssdk\.com\/score_task\/v1\/task\/(sign_in|get_read_bonus),requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/xingliuchao/jd/main/tt.js,script-update-interval=0
+jrttfarm = type=http-request,pattern=^https:\/\/api3-normal-c-\w+\.snssdk\.com\/ttgame\/game_farm\/home_info,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/xingliuchao/jd/main/tt.js,script-update-interval=0
+jrtt = type=cron,cronexp="5,35 8-23 * * *",wake-system=1,script-path=https://raw.githubusercontent.com/mandxy/ziyong/main/jrtt.js,script-update-interval=0
 
 */
+const jsname='今日头条极速版'
+const $ = Env(jsname)
+const notify = $.isNode() ?require('./sendNotify') : '';
+let signurlArr = [],signkeyArr=[]
+let farmurlArr = [],farmkeyArr=[]
+let readurlArr = [],readkeyArr=[]
+//var articles =''
+let tz=1;//0关闭通知，1默认开启
+let invit=1;//新用户自动邀请，0关闭，1默认开启
+var coins=''
+let other = ''
+var article =''
+var collect = ''
+var invited =''
+const hour = (new Date()).getHours();
+const minute = (new Date()).getMinutes();
 
-// ====================================
-// #Cookie获取
-// 1.阅读文章弹出金币
-// 2.签到
-// 3.我的农场
-// http-request ^https:\/\/is\.snssdk\.com\/score_task\/v1\/task\/(sign_in|get_read_bonus) script-path=https://raw.githubusercontent.com/iepngs/Script/master/jrtt/index.js,requires-body=true,tag=今日头条极速版-任务
-// http-request ^https:\/\/i\.snssdk\.com\/ttgame\/game_farm\/home_info script-path=https://raw.githubusercontent.com/iepngs/Script/master/jrtt/index.js,requires-body=true,tag=今日头条极速版-游戏
-// ====================================
-// #今日头条定时任务
-// Warning：定时时间不要动
-// cron "5,35 8-21 * * *" script-path=https://raw.githubusercontent.com/iepngs/Script/master/jrtt/index.js,tag=今日头条极速版
-// ====================================
-// MITM=i.snssdk.com,is.snssdk.com
-// ====================================
+//CK运行
 
-const $hammer=(()=>{const isRequest="undefined"!=typeof $request,isSurge="undefined"!=typeof $httpClient,isQuanX="undefined"!=typeof $task;const log=(...n)=>{for(let i in n)console.log(n[i])};const alert=(title,body="",subtitle="",options={})=>{let link=null;switch(typeof options){case"string":link=isQuanX?{"open-url":options}:options;break;case"object":if(["null","{}"].indexOf(JSON.stringify(options))==-1){link=isQuanX?options:options["open-url"];break}default:link=isQuanX?{}:""}if(isSurge)return $notification.post(title,subtitle,body,link);if(isQuanX)return $notify(title,subtitle,body,link);log("==============📣系统通知📣==============");log("title:",title,"subtitle:",subtitle,"body:",body,"link:",link)};const read=key=>{if(isSurge)return $persistentStore.read(key);if(isQuanX)return $prefs.valueForKey(key)};const write=(val,key)=>{if(isSurge)return $persistentStore.write(val,key);if(isQuanX)return $prefs.setValueForKey(val,key)};const request=(method,params,callback)=>{let options={};if(typeof params=="string"){options.url=params}else{options.url=params.url;if(typeof params=="object"){params.headers&&(options.headers=params.headers);params.body&&(options.body=params.body)}}method=method.toUpperCase();const writeRequestErrorLog=function(m,u){return err=>{log(`\n===request error-s--\n`);log(`${m} ${u}`,err);log(`\n===request error-e--\n`)}}(method,options.url);if(isSurge){const _runner=method=="GET"?$httpClient.get:$httpClient.post;return _runner(options,(error,response,body)=>{if(error==null||error==""){response.body=body;callback("",body,response)}else{writeRequestErrorLog(error);callback(error,"",response)}})}if(isQuanX){options.method=method;$task.fetch(options).then(response=>{response.status=response.statusCode;delete response.statusCode;callback("",response.body,response)},reason=>{writeRequestErrorLog(reason.error);response.status=response.statusCode;delete response.statusCode;callback(reason.error,"",response)})}};const done=(value={})=>{if(isQuanX)return isRequest?$done(value):null;if(isSurge)return isRequest?$done(value):$done()};const pad=(c="~",s=false,l=15)=>s?console.log(c.padEnd(l,c)):`\n${c.padEnd(l,c)}\n`;return{isRequest,isSurge,isQuanX,log,alert,read,write,request,done,pad}})();
-function date(fmt, dateObject = '') { dateObject = dateObject ? (dateObject == "object" ? dateObject : (new Date(+dateObject.toString().padEnd(13, "0").substr(0, 13)))) : new Date(); let ret; const opt = { "Y": dateObject.getFullYear().toString(), "m": (dateObject.getMonth() + 1).toString(), "d": dateObject.getDate().toString(), "H": dateObject.getHours().toString(), "i": dateObject.getMinutes().toString(), "s": dateObject.getSeconds().toString() }; for (let k in opt) { ret = new RegExp("(" + k + ")").exec(fmt); if (ret) { fmt = fmt.replace(ret[1], ret[1].length == 1 ? opt[k].padStart(2, "0") : opt[k]) }; }; return fmt; }
-function randomNumber(start, end, fixed = 0) {const differ = end - start, random = Math.random();return (start + differ * random).toFixed(fixed);};
-
-//====================================
-const level = 1;//开启日志级别 0:关闭 1:响应body 2:响应所有数据
-//++++++++++++++++++++++++++++++++++++
-
-//++++++++++++++++++++++++++++++++++++
-const Protagonist = "今日头条极速版";
-const host1 = "https://i.snssdk.com";
-const host2 = "https://is.snssdk.com";
-let taskQS = "", taskHeaders = "";
-let readQS = "", readHeaders = "";
-let farmQS = "", farmHeaders = "";
-const taskCookieKey = "jrttTaskCookie";
-const readCookieKey = "jrttReadCookie";
-const farmCookieKey = "jrttFarmCookie";
-const stepCookieKey = "jrttStepCookie";
-const hour = +(new Date()).getHours();
-let tips = "";
-const log = (section, response, data) => {
-    level && $hammer.log(`${Protagonist} ${section} response:`, level == 1 ? response : data);
-}
-const dailyStep = () => {
-    return new Promise(resolve => {
-        let history = $hammer.read(stepCookieKey);
-        history = history ? JSON.parse(history) : false;
-        const today = date("Ymd");
-        if(history && history.date == today){
-            return resolve(history.step);
+let isGetCookie = typeof $request !== 'undefined'
+if (isGetCookie) {
+   GetCookie();
+   $.done()
+} 
+if ($.isNode()) {
+//sign
+  if (process.env.JRTTSIGNURL && process.env.JRTTSIGNURL.indexOf('#') > -1) {
+   signurl = process.env.JRTTSIGNURL.split('#');
+   console.log(`您选择的是用"#"隔开\n`)
+  }
+  else if (process.env.JRTTSIGNURL && process.env.JRTTSIGNURL.indexOf('\n') > -1) {
+   signurl = process.env.JRTTSIGNURL.split('\n');
+   console.log(`您选择的是用换行隔开\n`)
+  } else {
+   signurl = process.env.JRTTSIGNURL.split()
+  };
+  if (process.env. JRTTSIGNKEY&& process.env.JRTTSIGNKEY.indexOf('#') > -1) {
+   signkey = process.env.JRTTSIGNKEY.split('#');
+  }
+  else if (process.env.JRTTSIGNKEY && process.env.JRTTSIGNKEY.split('\n').length > 0) {
+   signkey = process.env.JRTTSIGNKEY.split('\n');
+  } else  {
+   signkey = process.env.JRTTSIGNKEY.split()
+  };
+//farm
+if (process.env.JRTTFARMURL && process.env.JRTTFARMURL.indexOf('#') > -1) {
+   farmurl = process.env.JRTTFARMURL.split('#');
+   console.log(`您选择的是用"#"隔开\n`)
+  }
+  else if (process.env.JRTTFARMURL && process.env.JRTTFARMURL.indexOf('\n') > -1) {
+   farmurl = process.env.JRTTFARMURL.split('\n');
+   console.log(`您选择的是用换行隔开\n`)
+  } else {
+   farmurl = process.env.JRTTFARMURL.split()
+  };
+  if (process.env. JRTTFARMKEY&& process.env.JRTTFARMKEY.indexOf('#') > -1) {
+   farmkey = process.env.JRTTFARMKEY.split('#');
+  }
+  else if (process.env.JRTTFARMKEY && process.env.JRTTFARMKEY.split('\n').length > 0) {
+   farmkey = process.env.JRTTFARMKEY.split('\n');
+  } else  {
+   farmkey = process.env.JRTTFARMKEY.split()
+  };
+//read
+if (process.env.JRTTREADURL && process.env.JRTTREADURL.indexOf('#') > -1) {
+   readurl = process.env.JRTTREADURL.split('#');
+   console.log(`您选择的是用"#"隔开\n`)
+  }
+  else if (process.env.JRTTREADURL && process.env.JRTTREADURL.indexOf('\n') > -1) {
+   readurl = process.env.JRTTREADURL.split('\n');
+   console.log(`您选择的是用换行隔开\n`)
+  } else {
+   readurl = process.env.JRTTREADURL.split()
+  };
+  if (process.env. JRTTREADKEY&& process.env.JRTTREADKEY.indexOf('#') > -1) {
+   readkey = process.env.JRTTREADKEY.split('#');
+  }
+  else if (process.env.JRTTREADKEY && process.env.JRTTREADKEY.split('\n').length > 0) {
+   readkey = process.env.JRTTREADKEY.split('\n');
+  } else  {
+   readkey = process.env.JRTTREADKEY.split()
+  };
+//sign
+  Object.keys(signurl).forEach((item) => {
+        if (signurl[item]) {
+          signurlArr.push(signurl[item])
         }
-        // 1w就够上限再多也没有意义
-        const step = randomNumber(10001, 11007);
-        $hammer.write(`{"step":${step},"date":${today}}`, stepCookieKey);
-        resolve(step);
-    })
+    });
+    Object.keys(signkey).forEach((item) => {
+        if (signkey[item]) {
+          signkeyArr.push(signkey[item])
+        }
+    });
+//farm
+Object.keys(farmurl).forEach((item) => {
+        if (farmurl[item]) {
+          farmurlArr.push(farmurl[item])
+        }
+    });
+    Object.keys(farmkey).forEach((item) => {
+        if (farmkey[item]) {
+          farmkeyArr.push(signkey[item])
+        }
+    });
+//read
+Object.keys(readurl).forEach((item) => {
+        if (readurl[item]) {
+          readurlArr.push(readurl[item])
+        }
+    });
+    Object.keys(readkey).forEach((item) => {
+        if (readkey[item]) {
+          readkeyArr.push(readkey[item])
+        }
+    });
+    console.log(`============ 脚本执行-国际标准时间(UTC)：${new Date().toLocaleString()}  =============\n`)
+    console.log(`============ 脚本执行-北京时间(UTC+8)：${new Date(new Date().getTime() + 8 * 60 * 60 * 1000).toLocaleString()}  =============\n`)
+ } else {
+    signurlArr.push($.getdata('signurl'))
+    signkeyArr.push($.getdata('signkey'))
+    farmurlArr.push($.getdata('farmurl'))
+    farmkeyArr.push($.getdata('farmkey'))
+    readurlArr.push($.getdata('readurl'))
+    readkeyArr.push($.getdata('readkey'))
+}
+!(async () => {
+if (!signurlArr[0]) {
+    $.msg($.name, '【提示】请先获取今日头条极速版一cookie')
+    return;
+  }
+   console.log(`------------- 共${signurlArr.length}个账号\n`)
+  for (let i = 0; i < signurlArr.length; i++) {
+    if (signurlArr[i]) {
+      signurl = signurlArr[i];
+      signkey = signkeyArr[i];
+      farmurl = farmurlArr[i];
+      farmkey = farmkeyArr[i];
+      readurl = readurlArr[i];
+      readkey = readkeyArr[i];
+      $.index = i + 1;
+      console.log(`\n开始【今日头条极速版${$.index}】`)
+await invite()
+await userinfo()
+await profit()
+await sign_in()
+await openbox()
+await reading()
+await farm_sign_in()
+await openfarmbox()
+await landwarer()
+await double_reward()
+await sleepstatus()
+await walk()
+await control()
+//await sleepstart()
+//await sleepstop()
+//await collectcoins(coins)
+await showmsg()
+  }
+ }
+})()
+  .catch((e) => {
+    $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
+  })
+  .finally(() => {
+    $.msg($.name, $.subt, $.desc.join('\n')), $.log('', `🔔 ${$.name}, 结束!`, ''), $.done()
+  })
+
+function GetCookie() {
+ if($request&&$request.url.indexOf("info")>=0) {
+  const farmurlVal = $request.url.split(`?`)[1]
+    if (farmurlVal) $.setdata(farmurlVal,
+'farmurl')
+    $.log(`[${jsname}] 获取farm请求: 成功,farmirlVal: ${farmurl}`)
+    $.msg(`获取farmurl: 成功🎉`, ``)
+   const jrttfarmKey = JSON.stringify($request.headers)
+$.log(jrttfarmKey)
+  if(jrttfarmKey)        $.setdata(jrttfarmKey,'farmkey')
+    $.log(`[${jsname}] 获取farm请求: 成功,jrttfarmKey: ${farmkey}`)
+    $.msg(`获取farmkey: 成功🎉`, ``)
+}
+  if($request&&$request.url.indexOf("sign_in")>=0) {
+  const signurlVal = $request.url.split(`?`)[1]
+    if (signurlVal) $.setdata(signurlVal,
+'signurl')
+    $.log(`[${jsname}] 获取sign请求: 成功,signurlVal: ${signurl}`)
+    $.msg(`获取signurl: 成功🎉`, ``)
+   const jrttsignKey = JSON.stringify($request.headers)
+$.log(jrttsignKey)
+  if(jrttsignKey)        $.setdata(jrttsignKey,'signkey')
+    $.log(`[${jsname}] 获取sign请求: 成功,jrttsignKey: ${signkey}`)
+    $.msg(`获取signkey: 成功🎉`, ``)
 }
 
-//++++++++++++++++++++++++++++++++++++
-async function GetCookie() {
-    let suffix = /\/([^\/]+(?!.*\/))/.exec($request.url.replace("/?", "?"))[1].split("?");
-    const uri = suffix.shift();
-    const queryString = suffix.length ? suffix.join("?"): "";
-    $hammer.log(`${Protagonist} GetCookie(${uri ? uri : $request.url}).\n${queryString}`);
-    let cookieVal = {
-        qs: queryString,
-        headers: {"User-Agent": $request.headers["User-Agent"]}
+if($request&&$request.url.indexOf("get_read_bonus")>=0) {
+  const readurlVal = $request.url.split(`?`)[1]
+
+  //const article = readurlVal.replace(/\d{3}$/,Math.floor(Math.random()*1000));
+//article = article.replace(/\d{3}$/, (Math.random()*1e3).toFixed(0).padStart(3,"0"));
+
+  //$.log('11111111'+article)
+    if(article) $.setdata(article,
+'article')
+    if (readurlVal) $.setdata(readurlVal,
+'readurl')
+    $.log(`[${jsname}] 获取read请求: 成功,readurlVal: ${readurl}`)
+    $.msg(`获取readurl: 成功🎉`, ``)
+   const jrttreadKey = JSON.stringify($request.headers)
+$.log(jrttreadKey)
+  if(jrttreadKey)        $.setdata(jrttreadKey,'readkey')
+    $.log(`[${jsname}] 获取read请求: 成功,jrttreadKey: ${readkey}`)
+    $.msg(`获取readkey: 成功🎉`, ``)
     }
-    const copyHeaders = header => (cookieVal.headers[header] = $request.headers[header]);
-    let category = "";
-    switch (uri) {
-        case "sign_in":
-            category = "签到";
-        case "get_read_bonus":
-            category = "阅读";
-            copyHeaders("x-Tt-Token");
-            $hammer.write(JSON.stringify(cookieVal), uri == "sign_in" ? taskCookieKey : readCookieKey);
-            break;
-        case "home_info":
-            category = "游戏";
-            ["Cookie", "Referer"].forEach(copyHeaders);
-            $hammer.write(JSON.stringify(cookieVal), farmCookieKey);
-            break;
-        default:
-            return $hammer.done();
+  }
+function sign_in() {
+//$.log(signkey)
+return new Promise((resolve, reject) => {
+//$.log(signkey)
+  let sign_inurl ={
+    url: `https://api3-normal-c-lq.snssdk.com/score_task/v1/task/sign_in/?${signurl}`,
+    headers :JSON.parse(signkey),
+      timeout: 60000,
+}
+
+   $.post(sign_inurl,(error, response, data) =>{
+     const result = JSON.parse(data)
+       // $.log(data)
+      if(result.err_no == 0) {
+          other +='📣首页签到\n'
+          other +='签到完成\n'
+          other +='获得'+result.data.score_amount+'金币\n'
+          other +='连续签到'+result.data.sign_times+'天\n'
+  
+}else{
+          other +='📣首页签到\n'
+          other +='今日已完成签到\n'
+           }
+        //$.log(1111)
+        //$.msg(111)
+          resolve()
+    })
+   })
+  } 
+
+async function control(){
+   if(collect == 0){
+      await sleepstart();
+ //$.log('qqqqq'+collect)
+   }
+   if(collect == 1){
+  //$.log('1111111'+collect)
+      await sleepstop();
+      await collectcoins(coins);
+   }
+   if(collect == 2){
+      $.log('no opreation')
+      other +='\n\n生前何必久睡，死后自会长眠\n'
+   }
+   if(invited == 4 && invit== 1){
+      await invitation();
+   }
+}
+function invite() {
+//$.log(signkey)
+return new Promise((resolve, reject) => {
+//$.log(signkey)
+  let inviteurl ={
+    url: `https://api3-normal-c-lq.snssdk.com/score_task/v1/user/new_tabs/?${signurl}`,
+    headers :JSON.parse(signkey),
+      timeout: 60000,
+}
+
+   $.get(inviteurl,(error, response, data) =>{
+     const result = JSON.parse(data)
+      // $.log(data)
+      if(result.data.section[10].key=='mine_input_code') {
+          invited=4;
+           }else{
+          invited=5;
+
+}
+
+        //$.msg(111)
+          resolve()
+    })
+   })
+  } 
+function invitation() {
+return new Promise((resolve, reject) => {
+//$.log(signkey)
+  let invitatonurl ={
+    url: `https://api3-normal-c-lq.snssdk.com/luckycat/lite/v1/invite/post_invite_code/?_request_from=web&device_platform=ios&ac=4G&${signurl}`,
+    headers :JSON.parse(farmkey),
+      timeout: 60000,
+    body: JSON.stringify({"invitecode" : "1425840898"})
+}
+
+   $.post(invitatonurl,(error, response, data) =>{
+     const result = JSON.parse(data)
+       //$.log(data)
+       //$.log('i000000')
+        //$.msg(111)
+          resolve()
+    })
+   })
+  } 
+
+function userinfo() {
+//$.log(signkey)
+return new Promise((resolve, reject) => {
+//$.log(signkey)
+  let userinfourl ={
+    url: `https://api3-normal-c-hl.snssdk.com/passport/account/info/v2/?${signurl}`,
+    headers :JSON.parse(signkey),
+      timeout: 60000,
+}
+
+   $.get(userinfourl,(error, response, data) =>{
+     const result = JSON.parse(data)
+       // $.log(data)
+      if(result.message == 'success') {
+          other +='🎉'+result.data.name+'\n'
+  
+}     else if(result.message == 'error'){
+          other += '⚠️异常:'+result.data.description+'\n'
+           }else{
+          other += '⚠️异常'
+}
+        //$.log(1111)
+        //$.msg(111)
+          resolve()
+    })
+   })
+  } 
+
+function profit() {
+//$.log(signkey)
+return new Promise((resolve, reject) => {
+//$.log(signkey)
+  let profiturl ={
+    url: `https://api3-normal-c-lq.snssdk.com/score_task/v1/user/info/?${signurl}`,
+    headers :JSON.parse(signkey),
+      timeout: 60000,
+}
+
+   $.get(profiturl,(error, response, data) =>{
+     const result = JSON.parse(data)
+        //$.log(data)
+      if(result.err_no == 0) {
+          other +='🎉金币收益:'+result.data.score.amount+'\n🎉估计兑换现金:'+(result.data.score.amount/30000).toFixed(2)+'\n🎉'+'现金收益:'+result.data.cash.amount+'\n'
+      //$.log('11111111'+result.data.cash.amount)
+          
+}else{
+          other += '⚠️异常\n'
+           }
+        //$.log(1111)
+        //$.msg(111)
+          resolve()
+    })
+   })
+  } 
+
+//文章阅读30篇每天
+function reading() {
+//$.log(article)
+const articles = readurl.replace(/\d{3}$/,Math.floor(Math.random()*1000));
+return new Promise((resolve, reject) => {
+//$.log(article)
+  let readurl ={
+    url: `https://api3-normal-c-lq.snssdk.com/score_task/v1/task/get_read_bonus/?${articles}`,
+    headers :JSON.parse(readkey),
+      timeout: 60000,
+}
+
+   $.post(readurl,(error, response, data) =>{
+     const result = JSON.parse(data)
+        $.log(data)
+      if(result.err_no == 0) {
+          other +='📣文章阅读\n'
+          other +='阅读完成'
+          other +='获得'+result.data.score_amount+'金币\n'
+          other +='阅读进度'+result.data.icon_data.done_times+'/'+result.data.icon_data.read_limit+'\n'
+      }
+       if(result.err_no == 4){
+          other +='📣文章阅读\n'
+          other +='文章阅读已达上限\n'
+        }
+       if(result.err_no == 1028){
+          other +='📣文章阅读\n'
+          other +='这篇文章已经读过了\n'
+        }
+        //$.log(1111)
+        //$.msg(111)
+          resolve()
+    })
+   })
+  } 
+//农场签到
+function farm_sign_in() {
+//$.log(signkey)
+return new Promise((resolve, reject) => {
+//$.log(signkey)
+  let farm_sign_inurl ={
+    url: `https://api3-normal-c-lq.snssdk.com/ttgame/game_farm/reward/sign_in?watch_ad=1&${signurl}`,
+    headers :JSON.parse(farmkey),
+      timeout: 60000,
+}
+
+   $.get(farm_sign_inurl,(error, response, data) =>{
+     const result = JSON.parse(data)
+       // $.log(data)
+       other +='📣农场签到\n'
+      if(result.status_code == 0) {
+          other +='签到完成\n'
+         
+}else{
+          other +=result.message+'\n'
+           }
+        //$.log(1111)
+        //$.msg(111)
+          resolve()
+    })
+   })
+  } 
+
+function openbox() {
+//$.log(farmkey)
+return new Promise((resolve, reject) => {
+//$.log(farmkey)
+  let openboxurl ={
+    url: `https://it-lq.snssdk.com/score_task/v1/task/open_treasure_box/?${signurl}`,
+    headers :JSON.parse(signkey),
+      timeout: 60000,
+}
+
+   $.post(openboxurl,(error, response, data) =>{
+     const result = JSON.parse(data)
+        $.log(data)
+      if(result.err_no == 0) {
+//$.log('111111111'+result.next_treasure_time)
+        other +='📣首页宝箱\n'
+        other += '开启成功'
+        other += '获得金币'+result.data.score_amount+'个\n'
+        }
+      else{
+         if(result.err_no == 9){
+        other +='📣首页宝箱\n'
+        other += result.err_tips+'\n'
+        }else{
+        other +='📣首页宝箱\n'
+        other +="不在开宝箱时间\n"
+           }
     }
-    $hammer.alert(Protagonist, `${category}Cookie已写入`);
-    $hammer.done();
-}
-
-//++++++++++++++++++++++++++++++++
-async function main() {
-    const dbg = false;
-    if(dbg && await checkTaskCookie()){
-        // 这仨有问题还么有搞定
-        await openIndexBox();
-        await walkCount();
-        await viewSleepStatus(true);
-        return $hammer.done();
-    }
-    // 5,35 8-21 * * *
-    const minute = (new Date()).getMinutes();
-    const onece = hour == 8 && minute < 30;
-    const conclusion = !!(hour == 20 || hour == 21);
-    if(await checkTaskCookie()){
-        // minute < 30 && await openIndexBox();
-        if(onece){
-            await daliySignDetail();
-            await viewSleepStatus();
-        }
-        (hour == 20 && minute < 30) && await viewSleepStatus();
-        // (hour == 21 && minute > 30) && await walkPageData();
-    }
-    // if(await checkFarmCookie()){
-    //     onece && await getGameSign();
-    //     if([8,12,21].indexOf(hour) > -1 && minute < 30){
-    //         await offlineProfit();
-    //         await farmPolling();
-    //         await threeMeals();
-    //     }
-    //     if(conclusion && minute > 30){
-    //         await farmTask();
-    //     }
-    // }
-    
-    // 每日上限10篇,超过无奖励
-    await checkReadCookie() && await reading();
-
-    $hammer.alert(Protagonist, tips);
-    $hammer.done();
-}
-
-//++++++++++++++++++++++++++++++++++++
-function checkTaskCookie(){
-    return new Promise(resolve => {
-        let taskCookieVal = $hammer.read(taskCookieKey);
-        taskCookieVal = taskCookieVal ? JSON.parse(taskCookieVal) : "";
-        if(!taskCookieVal){
-            $hammer.alert(Protagonist, "任务Cookie不存在");
-            return resolve(false);
-        }
-        taskQS = taskCookieVal.qs;
-        taskCookieVal.headers["sdk-version"] = 2;
-        taskHeaders = taskCookieVal.headers;
-        resolve(true);
+        //$.log(1111)
+        //$.msg(111)
+          resolve()
     })
+   })
+  }  
+
+
+function openfarmbox() {
+//$.log(farmkey)
+return new Promise((resolve, reject) => {
+//$.log(farmkey)
+  let openfarmboxurl ={
+    url: `https://api3-normal-c-lq.snssdk.com/ttgame/game_farm/box/open?${farmurl}`,
+    headers :JSON.parse(farmkey),
+      timeout: 60000,
 }
 
-function checkReadCookie(){
-    return new Promise(resolve => {
-        let readCookieVal = $hammer.read(readCookieKey);
-        readCookieVal = readCookieVal ? JSON.parse(readCookieVal) : "";
-        if(!readCookieVal){
-            $hammer.log(`${$hammer.pad()}\n${Protagonist} 阅读Cookie不存在\n${$hammer.pad()}`);
-            return resolve(false);
+   $.get(openfarmboxurl,(error, response, data) =>{
+     const result = JSON.parse(data)
+        $.log(data)
+      if(result.status_code == 0) {
+        //$.log(1111)
+        other +='📣农场宝箱\n'
+        other += "第"+(5-result.data.box_num)+"开启成功"
+        other += "还可以开启"+result.data.box_num+"个\n"
+        
         }
-        readQS = readCookieVal.qs;
-        readCookieVal.headers["sdk-version"] = 2;
-        readHeaders = readCookieVal.headers;
-        resolve(true);
+      if(result.status_code == 5003){
+        other +='📣农场宝箱\n'
+        other +="已全部开启\n"
+           }
+        //$.log(1111)
+        //$.msg(111)
+          resolve()
     })
+   })
+  }  
+function landwarer() {
+return new Promise((resolve, reject) => {
+//$.log(farmkey)
+  let landwaterurl ={
+    url: `https://api3-normal-c-lq.snssdk.com/ttgame/game_farm/land_water?tentimes=0${farmurl}`,
+    headers :JSON.parse(farmkey),
+      timeout: 60000,
 }
 
-function checkFarmCookie(){
-    return new Promise(resolve => {
-        let farmCookieVal = $hammer.read(farmCookieKey);
-        farmCookieVal = farmCookieVal ? JSON.parse(farmCookieVal) : "";
-        if(!farmCookieVal){
-            $hammer.alert(Protagonist, "游戏Cookie不存在");
-            return resolve(false);
+   $.get(landwaterurl,(error, response, data) =>{
+     const result = JSON.parse(data)
+        //$.log(data)
+       other +='📣农场浇水\n'
+      if(result.status_code == '0') {
+        other += result.message+'\n'
+        other += '💧水滴剩余'+result.data.water+'\n'
         }
-        farmQS = farmCookieVal.qs;
-        farmCookieVal.headers["Content-Type"] = "applicationo/json";
-        farmHeaders = farmCookieVal.headers;
-        resolve(true);
+      else{
+        other +=result.message+'\n'
+           }
+        //$.log(1111)
+        //$.msg(111)
+          resolve()
     })
+   })
+  } 
+//done 这个离线奖励当宝箱全部开完后，需要进入农场再运行脚本，才能获取离线奖励，应该有一个判定，目前没有找到
+//利用浇水激活进农场状态获取离线奖励，目前测试每天离线奖励足够开启农场5个宝箱，不需要做游戏加快生产，具体情况看后期是否需要，再考虑加做除虫，开地，三餐奖励
+function double_reward() {
+//$.log(farmkey)
+return new Promise((resolve, reject) => {
+//$.log(farmkey)
+  let double_rewardurl ={
+    url: `https://api3-normal-c-lq.snssdk.com/ttgame/game_farm/double_reward?watch_ad=1&${farmurl}`,
+    headers :JSON.parse(farmkey),
+      timeout: 60000,
 }
 
-//++++++++++++++++++++++++++++++++++++
-// 任务options
-const initTaskOptions = (uri, host=1) => {
-    let options = uri == "task/get_read_bonus" ? {
-        url: `${host == 1 ? host1 : host2}/score_task/v1/${uri}/?${readQS}`,
-        headers: readHeaders
-    } : {
-        url: `${host == 1 ? host1 : host2}/score_task/v1/${uri}/?${taskQS}`,
-        headers: taskHeaders
-    }
-    if(uri.indexOf("sleep") > -1){
-        options.url = options.url.replace("/?", "/?&_request_from=web&");
-    }
-    return options;
-};
-
-// 游戏options
-const farmOptions = param => {
-    let paramArray = param.split("&");
-    const uri = paramArray.shift();
-    return {
-        url: `${host2}/ttgame/game_farm/${uri}?${farmQS}${paramArray.length ? "&" + paramArray.join("&") : ""}`,
-        headers: farmHeaders
-    };
-};
-
-//++++++++++++++++++++++++++++++++++++
-// 签到状态
-function daliySignDetail(){
-    return new Promise(resolve => {
-        const options = initTaskOptions("task/sign_in/detail", 2);
-        $hammer.request('get', options, async (error, response, data) => {
-            if(error){
-                $hammer.log(`${Protagonist} 签到状态 请求异常:\n${error}`, data);
-                return resolve(false);
-            }
-            log("签到状态", response, data);
-            const obj = JSON.parse(response);
-            tips += "\n[签到状态] ";
-            if(obj.err_no){
-                tips += obj.err_tips;
-                return resolve(false);
-            }
-            tips += `已连签:${obj.data.days}天`;
-            obj.data.today_signed || await daliySign();
-            resolve(true);
-        })
+   $.get(double_rewardurl,(error, response, data) =>{
+     const result = JSON.parse(data)
+        $.log(data)
+      if(result.status_code == 0) {
+        other +='📣农场视频双倍离线奖励\n'
+        other += '获得成功\n'
+        }else{
+          if(result.status_code==5033){
+            other += result.message+'\n'
+          }else{
+        //$.log('8888888'+result.service_time)
+        other +='📣农场视频双倍离线奖励\n'
+        other +="无离线产量可领取\n"
+           }
+  }
+        //$.log(1111)
+        //$.msg(111)
+          resolve()
     })
+   })
+  }  
+//走路
+function walk() {
+return new Promise((resolve, reject) => {
+//$.log(signkey)
+const walkcount = Math.round(Math.random()*(12000 - 10001) + 10001);
+const now = (Date.now()/1000).toFixed(0);
+//$.log('iiiiiiiii'+walkcount+'uuuuuu'+now)
+  let invitatonurl ={
+    url: `https://api3-normal-c-lq.snssdk.com/score_task/v1/walk/count/?&_request_from=web&device_platform=undefined&ac=4G${signurl}`,
+    headers :JSON.parse(signkey),
+      timeout: 60000,
+    body: JSON.stringify({"count" : walkcount,
+  "client_time" : now})
 }
 
-// 每日签到
-function daliySign() {
-    return new Promise(resolve => {
-        const options = initTaskOptions("task/sign_in", 2);
-        $hammer.request('post', options, (error, response, data) => {
-            if(error){
-                $hammer.log(`${Protagonist} 每日签到 请求异常:\n${error}`, data);
-                return resolve(false);
-            }
-            log("签到", response, data);
-            const obj = JSON.parse(response);
-            const result = obj.err_no == 0 ? `金币 +${obj.data.score_amount}` : `失败: ${obj.err_tips}`;
-            tips += `\n[每日签到] ${result}`;
-            setTimeout(()=>{
-                resolve(true);
-            }, 1200);
-        })
+   $.post(invitatonurl,(error, response, data) =>{
+     const result = JSON.parse(data)
+       $.log(data)
+       //$.log('i000000')
+        //$.msg(111)
+          resolve()
     })
+   })
+  } 
+
+
+//睡觉状态
+function sleepstatus() {
+//$.log(signkey)
+return new Promise((resolve, reject) => {
+//$.log(signkey)
+  let sleepstatusurl ={
+    url: `https://api3-normal-c-lq.snssdk.com/luckycat/lite/v1/sleep/status/?_request_from=web&${signurl}`,
+    headers :JSON.parse(signkey),
+      timeout: 60000,
 }
 
-//++++++++++++++++++++++++++++++++++++
-// 首页宝箱
-function openIndexBox() {
-    return new Promise(resolve => {
-        let options = initTaskOptions("task/open_treasure_box", 2);
-        options.body = "";
-        $hammer.request('post', options, (error, response, data) => {
-            if(error){
-                $hammer.log(`${Protagonist} 首页宝箱 请求异常:\n${error}`, data);
-                return resolve(false);
-            }
-            log("首页宝箱", response, data);
-            const obj = JSON.parse(response);
-            const result = obj.err_no == 0 ? `金币:+${obj.data.score_amount}, 下次时间: ${date("H点i分s秒", obj.data.next_treasure_time)}` : obj.err_tips;
-            tips += `\n[首页宝箱] ${result}`;
-            setTimeout(function(){
-                resolve(true);
-            }, 2500);
-        })
-    })
-}
-
-//++++++++++++++++++++++++++++++++++++
-// 阅读
-function reading(){
-    return new Promise(resolve => {
-        let options = initTaskOptions("task/get_read_bonus", 2);
-        let article = /group_id=(\d+)/.exec(options.url);
-        article = article ? article[1] : "";
-        if(!article){
-            $hammer.log(`${Protagonist} 阅读中止，cookie异常\n${options.url}`);
-            return resolve(false);
-        }
-        article = article.replace(/\d{3}$/, (Math.random()*1e3).toFixed(0).padStart(3,"0"));
-        options.url = options.url.replace(/group_id=\d+/, `group_id=${article}`);
-        const readDuration = [8,9,12,20,21].indexOf(hour) > -1;
-        const pushFlag = "impression_type=push&";
-        const byPush = options.url.indexOf(pushFlag) > 0;
-        if(readDuration && byPush){
-            options.url = options.url.replace(pushFlag, "");
-        }
-        if(!readDuration && !byPush){
-            options.url = options.url.replace("group_id=", `${pushFlag}group_id=`);
-        }
-        const delaySeconds = randomNumber(3, 10);
-        level && $hammer.log(`${Protagonist} will be execute reading after delay ${delaySeconds}s.`);
-        setTimeout(() => {
-            $hammer.request('get', options, (error, response, data) => {
-                if(error){
-                    $hammer.log(`${Protagonist} 阅读奖励 请求异常:\n${error}`, data);
-                    return resolve(false);
-                }
-                log("阅读奖励", response, data);
-                const obj = JSON.parse(response);
-                let result = obj.err_tips;
-                if(obj.err_no == 0){
-                    result = `金币:+${obj.data.score_amount}`;
-                }else{
-                    $hammer.log(`${Protagonist} 阅读响应数据异常：\n${response}`);
-                }
-                tips += `\n[阅读奖励] ${result}`;
-                resolve(true);
-            })
-        }, delaySeconds * 1000);
-    })
-}
-
-//++++++++++++++++++++++++++++++++++++
-// 查询睡觉任务状态
-function viewSleepStatus(collect=false) {
-    return new Promise(resolve => {
-        const options = initTaskOptions("sleep/status");
-        $hammer.request('get', options, async (error, response, data) => {
-            if(error){
-                $hammer.log(`${Protagonist} 睡觉状态查询 请求异常:\n${error}`, data);
-                return resolve(false);
-            }
-            log("睡觉状态查询", response, data);
-            const obj = JSON.parse(response);
-            if (obj.err_no != 0) {
-                $hammer.log(`${Protagonist} 睡觉状态查询异常:\n${obj.err_tips}`);
-                return resolve(false);
-            }
-            tips += `\n[睡觉待收金币] ${obj.data.sleep_unexchanged_score}\n[当前睡觉状态] `;
-            if(obj.data.sleeping){
-                tips += `已昏睡${obj.data.sleep_last_time}s`;
-                if(hour > 7 && hour < 20){
-                    await stopSleep();
-                }
-                await collectSleepCoin(obj.data.sleep_unexchanged_score);
-                return resolve(true);
+   $.get(sleepstatusurl,(error, response, data) =>{
+     const result = JSON.parse(data)
+       // $.log(data)
+      if(result.err_no == 0) {
+          other +='📣查询睡觉状态\n🎉查询'+result.err_tips+'\n'
+        
+       if(result.data.sleeping == false){
+          other +='当前状态:清醒着呢\n'
+//$.log('jjjjjjjjjj'+hour)
+         if(hour >= 20){
+          collect=0 //await sleepstart()
+           }else{
+            collect=2 //no opreation
+             }
             }else{
-                collect && collectSleepCoin(obj.data.history_amount);
-            }
-            tips += `睁着眼睛的没在睡`;
-            (hour > 19 || hour < 3) && await startSleep();
-            resolve(true);
-        })
+          other +='当前状态:酣睡中,已睡'+parseInt(result.data.sleep_last_time/3600)+'小时'+parseInt((result.data.sleep_last_time%3600)/60)+'分钟'+parseInt((result.data.sleep_last_time%3600)%60)+'秒\n'
+          other +='预计可得金币'+result.data.sleep_unexchanged_score+'\n'
+          coins=result.data.sleep_unexchanged_score
+         if(result.data.sleep_unexchanged_score == 3600 || parseInt(result.data.sleep_last_time/3600) == 12){ 
+//即使没有满足3600也在睡觉12小时后停止，以防封号
+         collect =1 //collect coins&sleepstop
+          }else{
+         collect =2
+}
+  
+           }
+     }
+        //$.log(1111)
+        //$.msg(111)
+          resolve()
     })
+   })
+  } 
+//开始睡觉
+function sleepstart() {
+//$.log(signkey)
+return new Promise((resolve, reject) => {
+//$.log(signkey)
+  let sleepstarturl ={
+    url: `https://api3-normal-c-lq.snssdk.com/luckycat/lite/v1/sleep/start/?_request_from=web&${signurl}`,
+    headers :JSON.parse(signkey),
+      timeout: 60000,
 }
 
-// 开始睡觉
-function startSleep() {
-    return new Promise(resolve => {
-        let options = initTaskOptions("sleep/start");
-        options.body = JSON.stringify({task_id: 145});
-        setTimeout(() => {
-            $hammer.request('post', options, (error, response, data) => {
-                if(error){
-                    $hammer.log(`${Protagonist} 开启睡觉 请求异常:\n${error}`, data);
-                    return resolve(false);
-                }
-                log("开启睡觉", response, data);
-                let obj = JSON.parse(response);
-                const result = obj.err_no == 0 ? (obj.data.sleeping ? "成功" : "失败") : obj.err_tips;
-                tips += `\n[开启睡觉状态] ${result}`;
-                resolve(true);
-            })
-        }, 2000);
+   $.post(sleepstarturl,(error, response, data) =>{
+     const result = JSON.parse(data)
+       // $.log(data)
+      if(result.err_no == 0) {
+          other +='📣开始睡觉\n该睡觉了，开始睡觉'+result.err_tips+'\n'
+  
+}     else if(result.err_no == 1052){
+          other +='📣开始睡觉\n'+result.err_tips+'\n'
+           }else{
+          other += '📣开始睡觉:'+'⚠️异常'
+}
+        //$.log(1111)
+        //$.msg(111)
+          resolve()
     })
+   })
+  } 
+//停止睡觉
+function sleepstop() {
+//$.log(signkey)
+return new Promise((resolve, reject) => {
+//$.log(signkey)
+  let sleepstopurl ={
+    url: `https://api3-normal-c-lq.snssdk.com/luckycat/lite/v1/sleep/stop/?_request_from=web&${signurl}`,
+    headers :JSON.parse(signkey),
+      timeout: 60000,
 }
 
-// 结束睡觉
-function stopSleep() {
-    return new Promise(resolve => {
-        let options = initTaskOptions("sleep/stop");
-        options.body = JSON.stringify({task_id: 145});
-        setTimeout(() => {
-            $hammer.request('post', options, (error, response, data) => {
-                if(error){
-                    $hammer.log(`${Protagonist} 结束睡觉 请求异常:\n${error}`, data);
-                    return resolve(false);
-                }
-                log("停止睡觉", response, data);
-                let obj = JSON.parse(response);
-                const result = obj.err_no == 0 ? (obj.data.sleeping ? "成功" : "失败") : obj.err_tips;
-                //result == "成功" && await collectSleepCoin(obj.data.history_amount); // aysnc
-                tips += `\n[结束睡觉状态] ${result}`;
-                resolve(true);
-            })
-        }, 2000);
+   $.post(sleepstopurl,(error, response, data) =>{
+     const result = JSON.parse(data)
+       // $.log(data)
+      if(result.err_no == 0) {
+          other +='📣停止睡觉\n'+result.err_tips+'\n'
+          
+}     else if(result.err_no == 1052){
+          other += '📣停止睡觉\n'+'还没开始睡觉\n'
+           }else{
+          other +='📣停止睡觉:'+'\n⚠️异常'
+}
+        //$.log(1111)
+        //$.msg(111)
+          resolve()
     })
+   })
+  } 
+//收取睡觉金币
+function collectcoins(coins) {
+//$.log(signkey)
+return new Promise((resolve, reject) => {
+//$.log(signkey)
+  let collectcoinsurl ={
+    url: `https://api3-normal-c-lq.snssdk.com/luckycat/lite/v1/sleep/done_task/?_request_from=web&device_platform=undefined&${signurl}`,
+    headers :JSON.parse(farmkey),
+      timeout: 60000,
+    body :JSON.stringify({score_amount: coins}),
+
 }
 
-// 领取睡觉金币
-function collectSleepCoin(coins) {
-    return new Promise(resolve => {
-        setTimeout(()=>{
-            if(coins < 1) {
-                return resolve(false);
-            }
-            let options = initTaskOptions("sleep/done_task");
-            options.url = options.url.replace("/?", "/?rit=undefined&use_ecpm=undefined");
-            options.headers['Content-Type'] = "application/json; encoding=utf-8";
-            options.body = JSON.stringify({task_id: 145, score_amount: coins});
-            $hammer.request('post', options, (error, response, data) => {
-                if(error){
-                    $hammer.log(`${Protagonist} 领取睡觉金币 请求异常:\n${error}`, data);
-                    return resolve(false);
-                }
-                log("领取睡觉金币", response, data);
-                let obj = JSON.parse(response);
-                const result = obj.err_no == 0 ? (obj.data.sleeping ? `${coins}个` : "失败") : obj.err_tips;
-                tips += `\n[领取睡觉金币] ${result}`;
-                resolve(true);
-            })
-        }, 2000);
-    })
+   $.post(collectcoinsurl,(error, response, data) =>{
+     const result = JSON.parse(data)
+       $.log(data)
+      if(result.err_no == 0) {
+          other +='📣收取金币\n'+result.err_tips+'     获得金币:'+coins
+          
+}     else{
+          other +='📣收取金币:'+'\n⚠️异常:'+result.err_tips+''
 }
-
-//++++++++++++++++++++++++++++++++++++
-// walk
-function walkPageData() {
-    return new Promise(resolve => {
-        const options = initTaskOptions("walk/page_data");
-        $hammer.request('get', options, async (error, response, data) => {
-            if(error){
-                $hammer.log(`${Protagonist} 走路活动 请求异常:\n${error}`, data);
-                return resolve(false);
-            }
-            log("走路活动", response, data);
-            const obj = JSON.parse(response);
-            tips += `\n[走路活动] `;
-            if(obj.err_no){
-                tips += `查询异常: ${obj.err_tips}`;
-                return resolve(false);
-            }
-            tips += `${obj.data.city}地区`;
-            for (const section of obj.data.today_info) {
-                // section.received_status == 2 && await collectWalkCoin(136);
-                if(section.received_status == 1){
-                    await walkCount();
-                    break;
-                }
-            }
-            if(obj.data.walk_info.length == 6 && !obj.data.is_awarded){
-                await collectWalkCoin(137);
-            }
-            setTimeout(()=>{
-                resolve(true);
-            }, 1200);
-        })
+        //$.log(1111)
+        //$.msg(111)
+          resolve()
     })
+   })
+  } 
+
+var Time = new Date(new Date().getTime() + 8 * 60 * 60 * 1000);
+async function showmsg(){
+if(tz==1){
+      $.msg(jsname, "", other)
+    if ($.isNode()&& (Time.getHours() == 12 && Time.getMinutes() <= 20) || (Time.getHours() == 23 && Time.getMinutes() >= 40)) {
+       await notify.sendNotify($.name,other)
+     }
+   }
+
 }
-
-function walkCount() {
-    return new Promise(async resolve => {
-        let options = initTaskOptions("walk/count");
-        const step = await dailyStep();
-        options.body = JSON.stringify({
-            count: step,
-            client_time: +(Date.now()/1000).toFixed(0)
-        });
-        $hammer.request('post', options, async (error, response, data) => {
-            if(error){
-                $hammer.log(`${Protagonist} 步数同步 请求异常:\n${error}`, data);
-                return resolve(false);
-            }
-            log("步数同步", response, data);
-            const obj = JSON.parse(response);
-            $hammer.log(`${Protagonist} walk request body:\n${options.body}`);
-            const result = obj.err_no == 0 ? `已同步${obj.data.walk_count}步` : `失败(${step}): ${obj.err_tips}`;
-            tips += `\n[步数同步] ${result}`;
-            obj.err_no || await collectWalkCoin(136);
-            setTimeout(()=>{
-                resolve(true);
-            }, 1200);
-        })
-    })
-}
-
-function collectWalkCoin(id){
-    return new Promise(resolve => {
-        setTimeout(()=>{
-            let options = initTaskOptions("walk/bonus");
-            options.url = options.url.replace("/?", "/?rit=undefined&use_ecpm=undefined&");
-            options.headers['Content-Type'] = "application/json; encoding=utf-8";
-            options.body = JSON.stringify({
-                task_id: id,
-                client_time: +(Date.now()/1000).toFixed(0)
-            });
-            $hammer.request('post', options, (error, response, data) => {
-                const title = id == 136 ? "走路日签" : "走路满勤";
-                if(error){
-                    $hammer.log(`${Protagonist} 领取${title} 请求异常:\n${error}`, data);
-                    return resolve(false);
-                }
-                log(title, response, data);
-                let obj = JSON.parse(response);
-                const result = obj.err_no == 0 ? `金币:+${obj.data.score_amount}` : `失败:${obj.err_tips}`;
-                tips += `\n[${title}] ${result}`;
-                resolve(true);
-            })
-        }, 2000);
-    })
-}
-
-//++++++++++++++++++++++++++++++++++++
-//游戏签到
-function getGameSign() {
-    return new Promise(resolve => {
-        const options = farmOptions(`reward/sign_in&watch_ad=0`);
-        $hammer.request('get', options, (error, response, data) =>{
-            if(error){
-                $hammer.log(`${Protagonist} 游戏签到 error: ${error}`);
-                return resolve(false);
-            }
-            log("游戏签到", response, data);
-            const result = JSON.parse(response);
-            tips += `\n[游戏签到] `;
-            if (result.status_code != 0) {
-                tips += result.message;
-                return resolve(false);
-            }
-            if(!result.data){
-                tips += "已领取或无奖励";
-                return resolve(false);
-            }
-            let receive = "";
-            for (item of result.data.sign){
-                if(item.status == 1){
-                    receive += `${item.num}个${item.name};`;
-                }
-            }
-            if(receive){
-                tips += `获得: ${receive}`;
-            }
-            resolve(true);
-        })
-    })
-}
-
-function offlineProfit(){
-    return new Promise(resolve => {
-        const options = farmOptions(`double_reward&watch_ad=1`);
-        $hammer.request('get', options, (error, response, data) =>{
-            if(error){
-                $hammer.log(`${Protagonist} 游戏离线收益 error: ${error}`);
-                return resolve(false);
-            }
-            log("游戏离线收益", response, data);
-            const result = JSON.parse(response);
-            tips += `\n[游戏离线收益] ${result.status_code?result.message:"已收取"}`;
-            return resolve(true);
-        })
-    })
-}
-
-function farmPolling() {
-    return new Promise(resolve => {
-        const avatar = "https%3A%2F%2Fs2.pstatp.com%2Fpgc%2Fv2%2Fresource%2Fpgc_web_v3%2Feeef6c8ca9b5db8d0b443379d9dce231.png";
-        const options = farmOptions(`polling_info&nickname=anonymouse&avatar_url=${avatar}`);
-        $hammer.request('get', options, async (error, response, data) =>{
-            if(error){
-                $hammer.log(`${Protagonist} 游戏主页 error: ${error}`);
-                return resolve(false);
-            }
-            log("游戏主页", response, data);
-            const result = JSON.parse(response);
-            tips += `\n[游戏主页] `;
-            if (result.status_code != 0) {
-                tips += `异常：${result.message}`;
-                return resolve(false);
-            }
-            tips += `状态：正常`;
-            const info = result.data.info;
-            if(info.box_num){
-                await open_box();
-            }
-            if(info.water > 100){
-                await land_water();
-            }
-            let type = "未知";
-            switch (info.kind_of_game) {
-                case 1:
-                    type = "打地鼠";
-                    break;
-                case 2:
-                    type = "钓鱼";
-                    break;
-                default:
-                    $hammer.log(`${Protagonist} farmPolling.info:\n`, info);
-                    break;
-            }
-            if(info.diglett_num && !info.diglett_cooling_time){
-                await diglettGame(type) && await diglettReward();
-            }
-            resolve(true);
-        })
-    })
-}
-
-
-//游戏宝箱
-function open_box(again=false) {
-    return new Promise(resolve => {
-        const options = farmOptions(`box/open`);
-        setTimeout(async () => {
-            $hammer.request('get', options, async (error, response, data) =>{
-                if(error){
-                    $hammer.log(`${Protagonist} 打开游戏宝箱 error: ${error}`);
-                    return resolve(0);
-                }
-                log("打开游戏宝箱", response, data);
-                const result = JSON.parse(response);
-                tips += again ? `` : "\n[打开游戏宝箱] ";
-                if (result.status_code != 0) {
-                    tips += result.message;
-                    return resolve(0);
-                }
-                if(!again){
-                    let coins = 0;
-                    let max = result.data.box_num;
-                    while(max-- > 0){
-                        coins += await open_box(true);
-                    }
-                    tips += `获得金币：${coins}`;
-                }
-                resolve(result.data.incr_coin);
-            })
-        }, 3000);
-    })
-}
-
-//浇水
-function land_water(again=false) {
-    return new Promise(resolve => {
-        setTimeout(()=>{
-            const options = farmOptions(`land_water`);
-            $hammer.request('get', options, async (error, response, data) =>{
-                if(error){
-                    $hammer.log(`${Protagonist} 浇水 error: ${error}`);
-                    return resolve(false);
-                }
-                log("浇水", response, data);
-                const result = JSON.parse(response);
-                tips += again ? "" : `\n[游戏浇水] `;
-                if (result.status_code != 0) {
-                    tips += result.message;
-                    return resolve(false);
-                }
-                if(again){
-                    return resolve(true);
-                }
-                let times = 0;
-                let max = result.data.water / 10 - 10;
-                while(max-- > 0) {
-                    const resp = await land_water(true);
-                    if(!resp){
-                        break;
-                    }
-                    times++;
-                }
-                tips += `${times}次`;
-                for (const land of result.data.info) {
-                    if (!land.status && land.unlock_able) {
-                        await unblockLand(land.land_id);
-                        break;
-                    }
-                    land.farm_event && await repairLand(land.land_id, land.farm_event.event_id);
-                }
-                return resolve(true);
-            })
-        }, randomNumber(2, 3)*1000);
-    })
-}
-
-//修复土地
-function repairLand(id, type){
-    return new Promise(resolve => {
-        const options = farmOptions(`handle_event&land_id=${id}&event_type=${type}&watch_ad=1`);
-        setTimeout(()=>{
-            $hammer.request('get', options, (error, response, data) =>{
-                if(error){
-                    $hammer.log(`${Protagonist} 修复土地 error: ${error}`);
-                    return resolve(false);
-                }
-                log("修复土地", response, data);
-                const result = JSON.parse(response);
-                tips += `,第${id}块土地修复：` + (result.status_code ? result.message : "成功");
-                resolve(true);
-            })
-        }, randomNumber(8,12)*1000);
-    })
-}
-
-//解锁土地
-function unblockLand(id) {
-    return new Promise(resolve => {
-        const options = farmOptions(`land/unlock&land_id=${id}`);
-        setTimeout(()=>{
-            $hammer.request('get', options, (error, response, data) =>{
-                if(error){
-                    $hammer.log(`${Protagonist} 解锁土地 error: ${error}`);
-                    return resolve(false);
-                }
-                log("解锁土地", response, data);
-                const result = JSON.parse(response);
-                tips += `,第${id}块土地解锁：` + (result.status_code ? result.message : "成功");
-                resolve(true);
-            })
-        }, 1500);
-    })
-}
-
-//获取任务
-function farmTask() {
-    return new Promise(resolve => {
-        const options = farmOptions(`daily_task/list`);
-        $hammer.request('get', options, async (error, response, data) =>{
-            if(error){
-                $hammer.log(`${Protagonist} 获取任务 error: ${error}`);
-                return resolve(false);
-            }
-            const result = JSON.parse(response);
-            log("获取任务", response, data);
-            tips += `\n[获取游戏任务] 状态：`;
-            if (result.status_code != 0) {
-                tips += result.message;
-                return resolve(false);
-            }
-            tips += "正常";
-            for (const task of result.data) {
-                (task.status == 1) && await taskReward(task.task_id);
-            }
-            resolve(true);
-        })
-    })
-}
-
-//领取任务奖励
-function taskReward(id) {
-    return new Promise(resolve => {
-        const options = farmOptions(`reward/task&task_id=${id}`);
-        $hammer.request('get', options, (error, response, data) =>{
-            if(error){
-                $hammer.log(`${Protagonist} 游戏任务领取 error: ${error}`);
-                return resolve(false);
-            }
-            log("游戏任务领取", response, data);
-            const result = JSON.parse(response);
-            resolve(true);
-        })
-    })
-}
-
-//三餐礼包状态
-function threeMeals() {
-    return new Promise(resolve => {
-        const options = farmOptions(`gift/list`);
-        $hammer.request('get', options, async (error, response, data) =>{
-            if(error){
-                $hammer.log(`${Protagonist} 三餐礼包 error: ${error}`);
-                return resolve(false);
-            }
-            log("三餐礼包", response, data);
-            const result = JSON.parse(response);
-            if (result.status_code != 0) {
-                tips += `\n[三餐礼包查询] 异常：${result.message}`;
-                return resolve(false);
-            }
-            for (const task of result.data) {
-                if(task.status == 1 || task.status == 4){
-                    const rewardDesc = `${task.title}:${task.reward_num}${task.name}`;
-                    await mealReward(task.gift_id, task.status, rewardDesc);
-                }
-            }
-            resolve(true);
-        })
-    })
-}
-
-//三餐礼包领取
-function mealReward(id, status, rewardDesc) {
-    return new Promise(resolve => {
-        const options = farmOptions(`reward/gift&gift_id=${id}&watch_ad=${status == 4 ? 1 : 0}`);
-        $hammer.request('get', options, (error, response, data) =>{
-            if(error){
-                $hammer.log(`${Protagonist} 三餐领取 error: ${error}`);
-                return resolve(false);
-            }
-            log("三餐领取", response, data);
-            const result = JSON.parse(response);
-            tips += `\n[三餐领取] `;
-            if (result.status_code != 0) {
-                tips += `异常：${result.message}`;
-                return resolve(false);
-            }
-            tips += rewardDesc;
-            resolve(true);
-        })
-    })
-}
-
-function diglettGame(type) {
-    return new Promise(resolve => {
-        setTimeout(()=>{
-            const options = farmOptions(`diglett_game`);
-            $hammer.request('get', options, (error, response, data) =>{
-                if(error){
-                    $hammer.log(`${Protagonist} 随机游戏 error: ${error}`);
-                    return resolve(false);
-                }
-                log("随机游戏", response, data);
-                const result = JSON.parse(response);
-                tips += `\n[随机游戏] ${result.status_code ? result.message : type}`;
-                resolve(true);
-            })
-        }, 5000);
-    })
-}
-
-function diglettReward() {
-    return new Promise(resolve => {
-        const num = randomNumber(80, 90);
-        const options = farmOptions(`diglett_reward&diamond_num=${num}&watch_ad=1`);
-        $hammer.request('get', options, (error, response, data) =>{
-            if(error){
-                $hammer.log(`${Protagonist} 游戏钻石 error: ${error}`);
-                return resolve(false);
-            }
-            log("游戏钻石", response, data);
-            const result = JSON.parse(response);
-            tips += `\n[游戏钻石] `;
-            if (result.status_code != 0) {
-                tips += `异常：${result.message}`;
-                return resolve(false);
-            }
-            tips += `收获砖石:${num},今日剩余:${result.data.diglett_num}次,当前背包共有钻石:${result.data.diamond_num}个`;
-            resolve(true);
-        })
-    })
-}
-
-//++++++++++++++++++++++++++++++++
-$hammer.isRequest ? GetCookie() : main();
-//++++++++++++++++++++++++++++++++
+function Env(t,e){class s{constructor(t){this.env=t}send(t,e="GET"){t="string"==typeof t?{url:t}:t;let s=this.get;return"POST"===e&&(s=this.post),new Promise((e,i)=>{s.call(this,t,(t,s,r)=>{t?i(t):e(s)})})}get(t){return this.send.call(this.env,t)}post(t){return this.send.call(this.env,t,"POST")}}return new class{constructor(t,e){this.name=t,this.http=new s(this),this.data=null,this.dataFile="box.dat",this.logs=[],this.isMute=!1,this.isNeedRewrite=!1,this.logSeparator="\n",this.startTime=(new Date).getTime(),Object.assign(this,e),this.log("",`\ud83d\udd14${this.name}, \u5f00\u59cb!`)}isNode(){return"undefined"!=typeof module&&!!module.exports}isQuanX(){return"undefined"!=typeof $task}isSurge(){return"undefined"!=typeof $httpClient&&"undefined"==typeof $loon}isLoon(){return"undefined"!=typeof $loon}toObj(t,e=null){try{return JSON.parse(t)}catch{return e}}toStr(t,e=null){try{return JSON.stringify(t)}catch{return e}}getjson(t,e){let s=e;const i=this.getdata(t);if(i)try{s=JSON.parse(this.getdata(t))}catch{}return s}setjson(t,e){try{return this.setdata(JSON.stringify(t),e)}catch{return!1}}getScript(t){return new Promise(e=>{this.get({url:t},(t,s,i)=>e(i))})}runScript(t,e){return new Promise(s=>{let i=this.getdata("@chavy_boxjs_userCfgs.httpapi");i=i?i.replace(/\n/g,"").trim():i;let r=this.getdata("@chavy_boxjs_userCfgs.httpapi_timeout");r=r?1*r:20,r=e&&e.timeout?e.timeout:r;const[o,h]=i.split("@"),a={url:`http://${h}/v1/scripting/evaluate`,body:{script_text:t,mock_type:"cron",timeout:r},headers:{"X-Key":o,Accept:"*/*"}};this.post(a,(t,e,i)=>s(i))}).catch(t=>this.logErr(t))}loaddata(){if(!this.isNode())return{};{this.fs=this.fs?this.fs:require("fs"),this.path=this.path?this.path:require("path");const t=this.path.resolve(this.dataFile),e=this.path.resolve(process.cwd(),this.dataFile),s=this.fs.existsSync(t),i=!s&&this.fs.existsSync(e);if(!s&&!i)return{};{const i=s?t:e;try{return JSON.parse(this.fs.readFileSync(i))}catch(t){return{}}}}}writedata(){if(this.isNode()){this.fs=this.fs?this.fs:require("fs"),this.path=this.path?this.path:require("path");const t=this.path.resolve(this.dataFile),e=this.path.resolve(process.cwd(),this.dataFile),s=this.fs.existsSync(t),i=!s&&this.fs.existsSync(e),r=JSON.stringify(this.data);s?this.fs.writeFileSync(t,r):i?this.fs.writeFileSync(e,r):this.fs.writeFileSync(t,r)}}lodash_get(t,e,s){const i=e.replace(/\[(\d+)\]/g,".$1").split(".");let r=t;for(const t of i)if(r=Object(r)[t],void 0===r)return s;return r}lodash_set(t,e,s){return Object(t)!==t?t:(Array.isArray(e)||(e=e.toString().match(/[^.[\]]+/g)||[]),e.slice(0,-1).reduce((t,s,i)=>Object(t[s])===t[s]?t[s]:t[s]=Math.abs(e[i+1])>>0==+e[i+1]?[]:{},t)[e[e.length-1]]=s,t)}getdata(t){let e=this.getval(t);if(/^@/.test(t)){const[,s,i]=/^@(.*?)\.(.*?)$/.exec(t),r=s?this.getval(s):"";if(r)try{const t=JSON.parse(r);e=t?this.lodash_get(t,i,""):e}catch(t){e=""}}return e}setdata(t,e){let s=!1;if(/^@/.test(e)){const[,i,r]=/^@(.*?)\.(.*?)$/.exec(e),o=this.getval(i),h=i?"null"===o?null:o||"{}":"{}";try{const e=JSON.parse(h);this.lodash_set(e,r,t),s=this.setval(JSON.stringify(e),i)}catch(e){const o={};this.lodash_set(o,r,t),s=this.setval(JSON.stringify(o),i)}}else s=this.setval(t,e);return s}getval(t){return this.isSurge()||this.isLoon()?$persistentStore.read(t):this.isQuanX()?$prefs.valueForKey(t):this.isNode()?(this.data=this.loaddata(),this.data[t]):this.data&&this.data[t]||null}setval(t,e){return this.isSurge()||this.isLoon()?$persistentStore.write(t,e):this.isQuanX()?$prefs.setValueForKey(t,e):this.isNode()?(this.data=this.loaddata(),this.data[e]=t,this.writedata(),!0):this.data&&this.data[e]||null}initGotEnv(t){this.got=this.got?this.got:require("got"),this.cktough=this.cktough?this.cktough:require("tough-cookie"),this.ckjar=this.ckjar?this.ckjar:new this.cktough.CookieJar,t&&(t.headers=t.headers?t.headers:{},void 0===t.headers.Cookie&&void 0===t.cookieJar&&(t.cookieJar=this.ckjar))}get(t,e=(()=>{})){t.headers&&(delete t.headers["Content-Type"],delete t.headers["Content-Length"]),this.isSurge()||this.isLoon()?(this.isSurge()&&this.isNeedRewrite&&(t.headers=t.headers||{},Object.assign(t.headers,{"X-Surge-Skip-Scripting":!1})),$httpClient.get(t,(t,s,i)=>{!t&&s&&(s.body=i,s.statusCode=s.status),e(t,s,i)})):this.isQuanX()?(this.isNeedRewrite&&(t.opts=t.opts||{},Object.assign(t.opts,{hints:!1})),$task.fetch(t).then(t=>{const{statusCode:s,statusCode:i,headers:r,body:o}=t;e(null,{status:s,statusCode:i,headers:r,body:o},o)},t=>e(t))):this.isNode()&&(this.initGotEnv(t),this.got(t).on("redirect",(t,e)=>{try{if(t.headers["set-cookie"]){const s=t.headers["set-cookie"].map(this.cktough.Cookie.parse).toString();this.ckjar.setCookieSync(s,null),e.cookieJar=this.ckjar}}catch(t){this.logErr(t)}}).then(t=>{const{statusCode:s,statusCode:i,headers:r,body:o}=t;e(null,{status:s,statusCode:i,headers:r,body:o},o)},t=>{const{message:s,response:i}=t;e(s,i,i&&i.body)}))}post(t,e=(()=>{})){if(t.body&&t.headers&&!t.headers["Content-Type"]&&(t.headers["Content-Type"]="application/x-www-form-urlencoded"),t.headers&&delete t.headers["Content-Length"],this.isSurge()||this.isLoon())this.isSurge()&&this.isNeedRewrite&&(t.headers=t.headers||{},Object.assign(t.headers,{"X-Surge-Skip-Scripting":!1})),$httpClient.post(t,(t,s,i)=>{!t&&s&&(s.body=i,s.statusCode=s.status),e(t,s,i)});else if(this.isQuanX())t.method="POST",this.isNeedRewrite&&(t.opts=t.opts||{},Object.assign(t.opts,{hints:!1})),$task.fetch(t).then(t=>{const{statusCode:s,statusCode:i,headers:r,body:o}=t;e(null,{status:s,statusCode:i,headers:r,body:o},o)},t=>e(t));else if(this.isNode()){this.initGotEnv(t);const{url:s,...i}=t;this.got.post(s,i).then(t=>{const{statusCode:s,statusCode:i,headers:r,body:o}=t;e(null,{status:s,statusCode:i,headers:r,body:o},o)},t=>{const{message:s,response:i}=t;e(s,i,i&&i.body)})}}time(t){let e={"M+":(new Date).getMonth()+1,"d+":(new Date).getDate(),"H+":(new Date).getHours(),"m+":(new Date).getMinutes(),"s+":(new Date).getSeconds(),"q+":Math.floor(((new Date).getMonth()+3)/3),S:(new Date).getMilliseconds()};/(y+)/.test(t)&&(t=t.replace(RegExp.$1,((new Date).getFullYear()+"").substr(4-RegExp.$1.length)));for(let s in e)new RegExp("("+s+")").test(t)&&(t=t.replace(RegExp.$1,1==RegExp.$1.length?e[s]:("00"+e[s]).substr((""+e[s]).length)));return t}msg(e=t,s="",i="",r){const o=t=>{if(!t)return t;if("string"==typeof t)return this.isLoon()?t:this.isQuanX()?{"open-url":t}:this.isSurge()?{url:t}:void 0;if("object"==typeof t){if(this.isLoon()){let e=t.openUrl||t.url||t["open-url"],s=t.mediaUrl||t["media-url"];return{openUrl:e,mediaUrl:s}}if(this.isQuanX()){let e=t["open-url"]||t.url||t.openUrl,s=t["media-url"]||t.mediaUrl;return{"open-url":e,"media-url":s}}if(this.isSurge()){let e=t.url||t.openUrl||t["open-url"];return{url:e}}}};this.isMute||(this.isSurge()||this.isLoon()?$notification.post(e,s,i,o(r)):this.isQuanX()&&$notify(e,s,i,o(r)));let h=["","==============\ud83d\udce3\u7cfb\u7edf\u901a\u77e5\ud83d\udce3=============="];h.push(e),s&&h.push(s),i&&h.push(i),console.log(h.join("\n")),this.logs=this.logs.concat(h)}log(...t){t.length>0&&(this.logs=[...this.logs,...t]),console.log(t.join(this.logSeparator))}logErr(t,e){const s=!this.isSurge()&&!this.isQuanX()&&!this.isLoon();s?this.log("",`\u2757\ufe0f${this.name}, \u9519\u8bef!`,t.stack):this.log("",`\u2757\ufe0f${this.name}, \u9519\u8bef!`,t)}wait(t){return new Promise(e=>setTimeout(e,t))}done(t={}){const e=(new Date).getTime(),s=(e-this.startTime)/1e3;this.log("",`\ud83d\udd14${this.name}, \u7ed3\u675f! \ud83d\udd5b ${s} \u79d2`),this.log(),(this.isSurge()||this.isQuanX()||this.isLoon())&&$done(t)}}(t,e)}
