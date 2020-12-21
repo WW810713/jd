@@ -47,9 +47,9 @@
 	      "为了一步到位成功，❗请按以下步骤操作❗，尽量避免出错。老鸟飘过(*^_^*)",
               "a.Cookie获取方式【<a href=\"http://athm.cn/z5tSeuc \">点我打开，进入app</a>】已测试圈叉与loon.",
 	      "b.点开【<a href=\"https://raw.githubusercontent.com/xingliuchao/jd/main/ps.txt\">ps.txt</a>】添加引用获取Cookie与Task.注意要启用→重写引用.❗成功header后禁用该条引用",	
-           "1.我>>获取用户名header",
+           "1.引用第一个重写---我>>获取用户名header",
            "2.活动>>分享赚现金 自己助力自己 获取助力任务header",
-	   "3.注释header重写，添加两个body重写",
+	   "3.注释header重写，添加两个body重写😀即引用第二个重写",
 	   "4.活动 获取账户信息 签到任务 活动body",
 	   "5.首页>>右上角 获取时段 时段翻倍body",
 	   "6.活动>>分享赚现金 自己助力自己 获取助力任务body" ,
@@ -65,7 +65,7 @@
          }],
      
       "repo": "https://github.com/ziye12/QCZJSPEED/blob/main/Task/qczjspeed.js",
-      "icons": ["https://raw.githubusercontent.com/xingliuchao/jd/main/png/carhome.png", "https://raw.githubusercontent.com/xingliuchao/jd/main/xingliuchao.png"],
+      "icons": ["https://raw.githubusercontent.com/xingliuchao/jd/main/xingliuchao.png", "https://raw.githubusercontent.com/xingliuchao/jd/main/png/carhome.png"],
       "script": "https://raw.githubusercontent.com/ziye12/QCZJSPEED/main/Task/qczjspeed.js"  
 	  
    }      
