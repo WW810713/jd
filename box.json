@@ -71,6 +71,13 @@
      {
     "id": "jrtt",
     "name": "今日头条极速版",
+     "descs_html": [
+       "使用说明:",
+	  "仅辅助使用， 邀请码 1465420698 🎈 填写后都会有金币奖励",
+	      "为了一步到位成功，❗请按以下步骤操作❗，尽量避免出错。老鸟飘过(*^_^*)",
+              "a.Cookie获取方式【<a href=\"https://raw.githubusercontent.com/xingliuchao/jd/main/shareCode.txt</a>】已测试圈叉与loon.",
+	      "b.点开【<a href=\"https://raw.githubusercontent.com/xingliuchao/jd/main/ps.txt\">ps.txt</a>】添加引用获取Cookie与Task.注意要启用→重写引用.❗成功header后禁用该条引用",	
+           "签到即可获取签到cookie 进一次农场即可获取农场cookie  读文章弹出金币获取读文章cookie"],
     "keys": ["farmurl", "farmkey", "signurl", "signkey", "readurl", "readkey"],
     "author": "@xingliuchao",
     "repo": "https://github.com/xingliuchao/jd/blob/main/jrtt.js",
