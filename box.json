@@ -57,7 +57,7 @@
       "author": "@xingliuchao",
             "settings": [
 		     {
-         "id": "notifytimes",
+         "id": "notifyInterval",
          "name": "通知频率 (点击查看设置说明)默认通知",
          "val": "1",
          "type": "number",
@@ -66,9 +66,17 @@
      
       "repo": "https://github.com/ziye12/QCZJSPEED/blob/main/Task/qczjspeed.js",
       "icons": ["https://raw.githubusercontent.com/xingliuchao/jd/main/xingliuchao.png", "https://raw.githubusercontent.com/xingliuchao/jd/main/png/carhome.png"],
-      "script": "https://raw.githubusercontent.com/ziye12/QCZJSPEED/main/Task/qczjspeed.js"  
-	  
-   }      
+      "script": "https://raw.githubusercontent.com/ziye12/QCZJSPEED/main/Task/qczjspeed.js"    
+      },      
+     {
+    "id": "ttjs",
+    "name": "今日头条极速版",
+    "keys": ["farmurl", "farmkey", "signurl", "signkey", "readurl", "readkey"],
+    "author": "@xingliuchao-ZhiYi脚本",
+    "repo": "https://github.com/xingliuchao/jd/blob/main/tt.js",
+    "icons": ["https://raw.githubusercontent.com/xingliuchao/jd/main/xingliuchao.png", "https://raw.githubusercontent.com/xingliuchao/jd/main/png/tt.png"],
+    "script": "https://raw.githubusercontent.com/xingliuchao/jd/main/tt.js"
+  }   
 	   
  ]
 }
