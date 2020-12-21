@@ -1,7 +1,12 @@
+📌根据需要，选择添加
+
+
 😀圈叉
 
 QQ🐧阅读---在重写引用里添加：https://raw.githubusercontent.com/xingliuchao/jd/main/QQreadCookie.conf
 
+
+❗❗❗汽车之家两条重写引用
 🚗之家极速---在重写引用里添加：https://raw.githubusercontent.com/xingliuchao/jd/main/ctrl-cookie.conf  获取header后❗重写禁用
 🚗之家极速---在重写引用里添加：https://raw.githubusercontent.com/xingliuchao/jd/main/ReadCookie.conf   获取body重写
 
@@ -20,6 +25,9 @@ QQ🐧阅读---在重写引用里添加：https://raw.githubusercontent.com/xing
 
 QQ🐧阅读----- https://raw.githubusercontent.com/xingliuchao/jd/main/QQreadcookie-loon.conf
 
+
+
+❗❗❗汽车之家两条重写引用
 
 🚗之家极速--- https://raw.githubusercontent.com/xingliuchao/jd/main/ctrl-cookie-loon.conf 获取header后❗重写禁用
 🚗之家极速---在重写引用里添加：https://raw.githubusercontent.com/xingliuchao/jd/main/ReadCookie-loon.conf   获取body重写
