@@ -5,7 +5,7 @@
 
 QQ🐧阅读---在重写引用里添加：https://raw.githubusercontent.com/xingliuchao/jd/main/QQreadCookie.conf
 
-今日头条极速--在重写引用里添加：https://raw.githubusercontent.com/xingliuchao/jd/main/ctrl-cookie.conf
+今日头条极速--在重写引用里添加：https://raw.githubusercontent.com/xingliuchao/jd/main/jrttcookie.conf
 
 ❗❗❗汽车之家两条重写引用
 🚗之家极速---在重写引用里添加：https://raw.githubusercontent.com/xingliuchao/jd/main/ctrl-cookie.conf  获取header后❗重写禁用
@@ -27,7 +27,7 @@ QQ🐧阅读---在重写引用里添加：https://raw.githubusercontent.com/xing
 
 QQ🐧阅读----- https://raw.githubusercontent.com/xingliuchao/jd/main/QQreadcookie-loon.conf
 
-今日头条极速--https://raw.githubusercontent.com/xingliuchao/jd/main/ctrl-cookie-loon.conf
+今日头条极速--https://raw.githubusercontent.com/xingliuchao/jd/main/jrttcookie-loon.conf
 
 
 ❗❗❗汽车之家两条重写引用
