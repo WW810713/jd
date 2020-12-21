@@ -54,7 +54,20 @@
 	   "5.首页>>右上角 获取时段 时段翻倍body",
 	   "6.活动>>分享赚现金 自己助力自己 获取助力任务body" ,
 	   "7.活动>>现金收入>>提现>>立即提现 获取提现body"],
-      "author": "@xingliuchao"
+      "author": "@xingliuchao",
+            "settings": [
+		     {
+         "id": "notifytimes",
+         "name": "通知频率 (点击查看设置说明)默认通知",
+         "val": "1",
+         "type": "number",
+         "desc": "设置0为无通知，设置1为通知"
+         }],
+     
+      "repo": "https://github.com/ziye12/QCZJSPEED/blob/main/Task/qczjspeed.js",
+      "icons": ["https://raw.githubusercontent.com/xingliuchao/jd/main/png/carhome.png", "https://raw.githubusercontent.com/xingliuchao/jd/main/xingliuchao.png"],
+      "script": "https://raw.githubusercontent.com/ziye12/QCZJSPEED/main/Task/qczjspeed.js"  
+	  
    }      
 	   
  ]
