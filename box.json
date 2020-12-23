@@ -49,12 +49,12 @@
 	      "b.点开【<a href=\"https://raw.githubusercontent.com/xingliuchao/jd/main/ps.txt\">ps.txt</a>】添加引用获取Cookie与Task.注意要启用→重写引用.❗成功header后禁用该条引用",	
            "1.引用第一个重写---我>>获取用户名header",
            "2.活动>>分享赚现金 自己助力自己 获取助力任务header",
-	   "3.注释header重写，添加两个body重写😀即引用第二个重写",
+	   "3.注释header重写，添加第一个body重写😀即引用第二个重写",
 	   "4.活动 获取账户信息 签到任务 活动body",
 	   "5.首页>>右上角 获取时段 时段翻倍body",
 	   "6.活动>>分享赚现金 自己助力自己 获取助力任务body" ,
 	   "7.活动>>现金收入>>提现>>立即提现 获取提现body",
-	   "8.⚠️⚠️⚠️以上CK全部获取完以后，添加时段body重写，在boxjs里设置ins的值，再按操作获取活动页面body",
+	   "8.⚠️⚠️⚠️以上CK全部获取完以后，添加时段body重写即第3个重写引用，在boxjs里设置ins的值，再按操作获取活动页面body",
 	     "设置ins=1点击 活动 右上角领惊喜福利 获取惊喜福利body",
 	     "设置ins=2点击 活动 看视频领金币 获取视频body",
              "设置ins=3点击 活动 观看福利视频 获取福利视频body",
@@ -82,7 +82,7 @@
 	    },
 	    {
                "id": "qczjIns",
-               "name": "仅关于活动页面改Ins获取body---0不获取",
+               "name": "仅关于活动页面改Ins获取body,即第3个重写引用开启---0不获取",
                "val": "0",
                "type": "number",
                "desc": "0不获取，1获取惊喜福利body，2获取视频body,3获取福利视频body,4获取福利body"
