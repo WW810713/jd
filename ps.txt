@@ -7,10 +7,11 @@ QQ🐧阅读---在重写引用里添加：https://raw.githubusercontent.com/xing
 
 今日头条极速--在重写引用里添加：https://raw.githubusercontent.com/xingliuchao/jd/main/jrttcookie.conf
 
-❗❗❗汽车之家两条重写引用
-🚗之家极速---在重写引用里添加：https://raw.githubusercontent.com/xingliuchao/jd/main/ctrl-cookie.conf  获取header后❗重写禁用
-🚗之家极速---在重写引用里添加：https://raw.githubusercontent.com/xingliuchao/jd/main/ReadCookie.conf   获取body重写
 
+❗❗❗汽车之家两条重写引用（垃圾汽车不好薅羊毛，耐心不足建议弃坑）
+🚗之家极速---在重写引用里添加：https://raw.githubusercontent.com/xingliuchao/jd/main/ctrl-cookie.conf  获取header后❗重写禁用
+🚗之家极速---在重写引用里添加：https://raw.githubusercontent.com/xingliuchao/jd/main/ReadCookie.conf   获取body的第1个重写
+🚗之家极速---在重写引用里添加：https://raw.githubusercontent.com/xingliuchao/jd/main/ctrl-cookie2.conf 获取body的第1个重写
 
 
 
@@ -30,9 +31,11 @@ QQ🐧阅读----- https://raw.githubusercontent.com/xingliuchao/jd/main/QQreadco
 今日头条极速--https://raw.githubusercontent.com/xingliuchao/jd/main/jrttcookie-loon.conf
 
 
-❗❗❗汽车之家两条重写引用
+
+❗❗❗汽车之家两条重写引用（垃圾汽车不好薅羊毛，耐心不足建议弃坑）
 🚗之家极速--- https://raw.githubusercontent.com/xingliuchao/jd/main/ctrl-cookie-loon.conf 获取header后❗重写禁用
-🚗之家极速--- https://raw.githubusercontent.com/xingliuchao/jd/main/ReadCookie-loon.conf   获取body重写
+🚗之家极速--- https://raw.githubusercontent.com/xingliuchao/jd/main/ReadCookie-loon.conf   获取body的第1个重写
+🚗之家极速--- https://raw.githubusercontent.com/xingliuchao/jd/main/ctrl-cookie-loon2.conf   获取body的第2个重写
 -
 
 ！！下一步在所有步骤完成后，最后添加！！
