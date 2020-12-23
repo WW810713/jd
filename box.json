@@ -47,7 +47,6 @@
 	      "最好耐心跟做，希望成功。为了一步到位成功，❗请按以下步骤操作❗，尽量避免出错。老鸟飘过(*^_^*)",
               "a.Cookie获取方式【<a href=\"http://athm.cn/z5tSeuc \">点我打开，进入app</a>】已测试圈叉与loon.",
 	      "b.点开【<a href=\"https://raw.githubusercontent.com/xingliuchao/jd/main/ps.txt\">ps.txt</a>】添加引用获取Cookie与Task.注意要启用→重写引用.❗成功header后禁用该条引用",	
-           
 	   "1.引用第一个重写---我>>获取用户名header",
            "2.活动>>分享赚现金 自己助力自己 获取助力任务header",
 	   "3.注释header重写，添加第一个body重写😀即引用第二个重写",
@@ -81,10 +80,7 @@
             }
             
           ]
-	    },
-		    
-		    
-		    
+	    },    
 	    {
                "id": "qczjIns",
                "name": "仅关于活动页面改Ins获取body,即第3个重写引用开启---0不获取",
@@ -92,7 +88,6 @@
                "type": "number",
                "desc": "0不获取，1获取惊喜福利body，2获取视频body,3获取福利视频body,4获取福利body"
                  }
-	    
 	    ],
       "icons": ["https://raw.githubusercontent.com/xingliuchao/jd/main/xingliuchao.png", "https://raw.githubusercontent.com/xingliuchao/jd/main/png/carhome.png"],
       "repo": "https://github.com/ziye12/QCZJSPEED/blob/main/Task/qczjspeed.js",
