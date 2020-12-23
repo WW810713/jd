@@ -11,14 +11,14 @@ const shareCodes = [
     zd: $.getdata("zd_shareCode1") || "olmijoxgmjutzr2rlylpnfhsdfcqe2scndhws3i",
     nc: $.getdata("nc_shareCode1") || "11702238f4624a9a92e7494483515a00",
     mc: $.getdata("mc_shareCode1") || "MTAxODc2NTEzMjAwMDAwMDAyNzIyNzE1Mw==",
-    ddgc: $.getdata("dd_shareCode1") || "P04z54XCjVWnYaS5m9cZ2b43yoex2yRq4gkubE",
+    ddgc: $.getdata("dd_shareCode1") || "T0225KkcRh4bowCFIR2gwqMMfQCjVWnYaS5kRrbA",
     jxgc: $.getdata("jx_shareCode1") || "T76ufOSQ3-p1EnGXWSDoPw==",
   },
   {
     zd: $.getdata("zd_shareCode2") || "olmijoxgmjutzr2rlylpnfhsdfcqe2scndhws3i",
     nc: $.getdata("nc_shareCode2") || "11702238f4624a9a92e7494483515a00",
     mc: $.getdata("mc_shareCode2") || "MTAxODc2NTEzMjAwMDAwMDAyNzIyNzE1Mw==",
-    ddgc: $.getdata("dd_shareCode2") || "P04z54XCjVWnYaS5m9cZ2b43yoex2yRq4gkubE",
+    ddgc: $.getdata("dd_shareCode2") || "T0225KkcRh4bowCFIR2gwqMMfQCjVWnYaS5kRrbA",
     jxgc: $.getdata("jx_shareCode2") || "T76ufOSQ3-p1EnGXWSDoPw==",
   },
 ];
