@@ -104,7 +104,40 @@
               "a.点开（shareCode）复制整段话打开头条极速版助个力😀【<a href=\"https://raw.githubusercontent.com/xingliuchao/jd/main/shareCode.txt\">shareCode.txt</a>】已测试圈叉与loon",
 	      "b.点开【<a href=\"https://raw.githubusercontent.com/xingliuchao/jd/main/ps.txt\">ps.txt</a>】添加引用获取Cookie.注意要启用→重写引用",	
            "签到即可获取签到cookie 进一次农场即可获取农场cookie  读文章弹出金币获取读文章cookie❗成功后禁用该条引用"],
-    "keys": ["farmurl", "farmkey", "signurl", "signkey", "readurl", "readkey"],
+    "keys": ["farmurl", "farmkey", "signurl", "signkey", "readurl", "readkey",
+	    "farmurl2", "farmkey2", "signurl2", "signkey2", "readurl2", "readkey2"],
+     "settings": [{
+        "id": "jrttjsb",
+        "name": "当前账号",
+        "val": "1",
+        "type": "number",
+        "desc": "当前抓取ck记录的账号序号，如：1、2、3、"
+      },
+      {
+        "id": "jrttjsb",
+        "name": "运行账号个数",
+        "val": "1",
+        "type": "number",
+        "desc": "指定任务最多跑几个账号，根据抓取的账号数据个数来设值"
+      },
+       {
+			"id": "tz",
+			"name": "默认开启通知",
+			"val": "1",
+			"type": "radios",
+			"desc": "根据实际情况选择",
+                        "items": [
+            {
+              "key": "0",
+              "label": "关闭通知"
+            },
+            {
+              "key": "1",
+              "label": "开启通知"
+            }]
+	 }	  
+    ],
+	     
     "author": "@xingliuchao",
     "repo": "https://github.com/xingliuchao/jd/blob/main/jrtt.js",
     "icons": ["https://raw.githubusercontent.com/xingliuchao/jd/main/xingliuchao.png", "https://raw.githubusercontent.com/xingliuchao/jd/main/png/tt.png"],
