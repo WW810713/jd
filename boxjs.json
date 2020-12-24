@@ -11,7 +11,7 @@
      "descs_html": [
        "使用说明:",
 	  "签到，看视频，开宝箱"],
-    "keys": ["watchVideoSign", "openBoxSign", "qedssign", "nativeSign", "checkinheader", "querSign", "punchCardheader"],
+    "keys": ["checkinheader", "punchCardheader"],
     "author": "@xingliuchao",
     "repo": "https://github.com/DD-D1/2020scripts/blob/master/QQReadSign.js",
     "icons": ["https://raw.githubusercontent.com/xingliuchao/jd/main/xingliuchao.png", "https://raw.githubusercontent.com/xingliuchao/jd/main/xingliuchao.png"],
