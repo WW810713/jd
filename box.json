@@ -107,7 +107,7 @@
     "keys": ["farmurl", "farmkey", "signurl", "signkey", "readurl", "readkey"],
      "settings": [
        {
-			"id": "tz",
+			"id": "notify",
 			"name": "默认开启通知",
 			"val": "1",
 			"type": "radios",
