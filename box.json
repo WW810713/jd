@@ -134,7 +134,7 @@
     "name": "QQ阅读APP",
      "descs_html": [
        "使用说明:",
-	  "签到，看视频，开宝箱"],
+	  "签到，看视频，开宝箱--cookie引用在QQreadCookie内"],
     "keys": ["checkinheader", "punchCardheader"],
     "author": "@xingliuchao",
     "repo": "https://github.com/DD-D1/2020scripts/blob/master/QQReadSign.js",
