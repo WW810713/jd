@@ -120,7 +120,7 @@ if ($.isNode()) {
   });
 
   console.log(
-    `============ 共${qqreadtimehdArr.length}个企鹅读书账号  =============\n`
+    `============ 共${qqreadtimehdArr.length}个QQ读书小程序账号  =============\n`
   );
   console.log(
     `============ 脚本执行-北京时间(UTC+8)：${new Date(
@@ -382,8 +382,13 @@ function qqreadinfo() {
     $.get(toqqreadinfourl, (error, response, data) => {
       if (logs) $.log(`${jsname}, 用户名: ${data}`);
       info = JSON.parse(data);
+   if (!info.data.user)
+      $.msg(`⛽❌❌❌【${jsname+(K+1)}】COOKE失效，请重新获取`);
+   if (info.data.user.nickName){
       kz += `\n========== 【${info.data.user.nickName}】 ==========\n`;
       tz += `\n========== 【${info.data.user.nickName}】 ==========\n`;
+      }
+   
 
       resolve();
     });
