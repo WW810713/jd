@@ -3,7 +3,7 @@
 
 😀圈叉
 
-QQ🐧阅读小程序---在重写引用里添加：https://raw.githubusercontent.com/xingliuchao/jd/main/QQreadCookie.conf
+QQ阅读小程序|QQ阅读app|百度---在重写引用里添加：https://raw.githubusercontent.com/xingliuchao/jd/main/QQreadCookie.conf
 
 今日头条极速--在重写引用里添加：https://raw.githubusercontent.com/xingliuchao/jd/main/jrttcookie.conf
 
