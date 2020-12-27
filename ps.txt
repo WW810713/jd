@@ -3,7 +3,7 @@
 
 😀圈叉
 
-QQ🐧阅读---在重写引用里添加：https://raw.githubusercontent.com/xingliuchao/jd/main/QQreadCookie.conf
+QQ🐧阅读小程序---在重写引用里添加：https://raw.githubusercontent.com/xingliuchao/jd/main/QQreadCookie.conf
 
 今日头条极速--在重写引用里添加：https://raw.githubusercontent.com/xingliuchao/jd/main/jrttcookie.conf
 
@@ -26,7 +26,7 @@ QQ🐧阅读---在重写引用里添加：https://raw.githubusercontent.com/xing
 
 配置 -> 脚本 -> 订阅脚本- > 点击右上角+号 -> 添加url链接  
 
-QQ🐧阅读----- https://raw.githubusercontent.com/xingliuchao/jd/main/QQreadcookie-loon.conf
+QQ🐧阅读小程序----- https://raw.githubusercontent.com/xingliuchao/jd/main/QQreadcookie-loon.conf
 
 今日头条极速--https://raw.githubusercontent.com/xingliuchao/jd/main/jrttcookie-loon.conf
 
