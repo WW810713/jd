@@ -143,7 +143,7 @@
      },
       {
     "id": "BaiduSP",
-    "name": "百度",
+    "name": "百度极速",
      "descs_html": [
        "使用说明:",
 	     "为了一步到位成功，❗请按以下步骤操作❗，尽量避免出错。老鸟飘过(*^_^*)",
@@ -151,7 +151,7 @@
 	      "2.点开【<a href=\"https://raw.githubusercontent.com/xingliuchao/jd/main/ps.txt\">ps.txt</a>】，添加引用获取Cookie与Task.注意要启用→重写引用",
 	      "进入刚才那个网页并刷新网页",
 	      "3.有必要的一步👉【<a href=\"https://dwz.cn/PTCBgNNk \">点我打开</a>】👈.",
-              "3.❗️完成后禁用重写规则"],
+              "3.❗️完成后禁用重写规则，感谢sunert大佬"],
     "keys": ["chavy_cookie_tieba"],
     "author": "@chavyleung-xingliuchao",
     "repo": "https://github.com/chavyleung/scripts/tree/master/tieba",
