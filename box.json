@@ -129,18 +129,6 @@
     "icons": ["https://raw.githubusercontent.com/xingliuchao/jd/main/xingliuchao.png", "https://raw.githubusercontent.com/xingliuchao/jd/main/png/tt.png"],
     "script": "https://raw.githubusercontent.com/xingliuchao/jd/main/jrtt.js"
      },
-     {
-    "id": "QreadAPP",
-    "name": "QQ阅读APP",
-     "descs_html": [
-       "使用说明:",
-	  "签到，看视频，开宝箱--cookie引用在QQreadCookie内"],
-    "keys": ["QQreadhd", "QQreadvideohd"],
-    "author": "@xingliuchao",
-    "repo": "https://github.com/ziye12/JavaScript/blob/master/Task/QQread.js",
-    "icons": ["https://raw.githubusercontent.com/xingliuchao/jd/main/xingliuchao.png", "https://raw.githubusercontent.com/xingliuchao/jd/main/png/QQreadapp.png"],
-    "script": "https://raw.githubusercontent.com/ziye12/JavaScript/master/Task/QQread.js"
-     },
       {
     "id": "BaiduSP",
     "name": "百度极速",
