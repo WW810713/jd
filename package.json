@@ -1,0 +1,27 @@
+{
+  "name": "xingliuchao",
+  "version": "1.0.0",
+  "description": "",
+  "main": "QQread.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xingliuchao/jd.git"
+  },
+  "keywords": ["QQ读书小程序等等"],
+  "author": "xingliuchao",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xingliuchao/jd/issues"
+  },
+  "homepage": "https://github.com/xingliuchao/jd#readme",
+  "dependencies": {
+    "crypto-js": "^4.0.0",
+    "got": "^11.7.0",
+    "http-server": "^0.12.3",
+    "tough-cookie": "^4.0.0",
+    "download": "^8.0.0"
+  }
+}
