@@ -20,7 +20,7 @@ QQ阅读小程序|QQ阅读app|百度🧧---在重写引用里添加：https://ra
 */11 * * * * https://raw.githubusercontent.com/xingliuchao/jd/main/QQread.js, tag=QQ阅读小程序多开, enabled=true
 */10 * * * * https://raw.githubusercontent.com/ziye12/QCZJSPEED/master/Task/qczjspeed.js, tag=汽车之家, enabled=true
 5,35 8-23 * * * https://raw.githubusercontent.com/xingliuchao/jd/main/jrtt.js, tag=今日头条极速版, enabled=true
-9,39 5-21 * * * https://raw.githubusercontent.com/Sunert/Scripts/master/Task/baidu_speed.js, tag=百度极速极速版, enabled=true
+9 9-21 * * * https://raw.githubusercontent.com/Sunert/Scripts/master/Task/baidu_speed.js, tag=百度极速极速版, enabled=true
 ---------------------------------------------------------------------------------------------------------------------------------------------------
 
 😀loon
