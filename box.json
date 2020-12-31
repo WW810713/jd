@@ -151,10 +151,10 @@
 	      "2.点开【<a href=\"https://raw.githubusercontent.com/xingliuchao/jd/main/ps.txt\">ps.txt</a>】，添加引用获取Cookie与Task.注意要启用→重写引用",
 	      "进入刚才那个网页并刷新网页",
               "3.❗️完成后禁用重写规则，感谢sunert大佬"],
-    "keys": ["chavy_cookie_tieba"],
+    "keys": ["CookieTB"],
     "author": "@chavyleung-xingliuchao",
-    "repo": "https://github.com/chavyleung/scripts/tree/master/tieba",
-    "script": "https://raw.githubusercontent.com/chavyleung/scripts/master/tieba/tieba.js",
+    "repo": "https://github.com/sazs34/TaskConfig/blob/master/task/sign_baidu_tieba_v2.js",
+    "script": "https://raw.githubusercontent.com/NobyDa/Script/master/BDTieBa-DailyBonus/TieBa.js",
     "icons": ["https://raw.githubusercontent.com/Orz-3/mini/master/baidu.png", "https://raw.githubusercontent.com/Orz-3/task/master/baidu.png"]
      }    
  ]
