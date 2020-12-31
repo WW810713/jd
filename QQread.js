@@ -198,7 +198,7 @@ all();
 function all() {
 
 if (!qqreadbdArr[0]) {
-    $.msg(jsname, '⚠️提示：您还未获取cookie,请点击前往获取cookie\n', 'https://m.q.qq.com/a/s/d3eacc70120b9a37e46bad408c0c4c2a', {"open-url": "https://m.q.qq.com/a/s/d3eacc70120b9a37e46bad408c0c4c2a"})
+    $.msg(jsname, '⚠️提示：您还未获取cookie,请点击👉前往获取cookie\n', 'https://m.q.qq.com/a/s/f9726d0a930319a7dd35bbcc8e42dc60', {"open-url": "https://m.q.qq.com/a/s/f9726d0a930319a7dd35bbcc8e42dc60"})
      $.done()
   };
 
